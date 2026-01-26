@@ -1,0 +1,31 @@
+Product
+- Image
+- Name
+- Description
+
+Article
+- Image
+- Title
+- Slug
+- Date (default)
+- Introduction
+- Body
+- Conclusion
+
+Event
+- Image
+- title
+- Description
+- Event date
+- Location
+
+Gallery
+- Image
+- Title
+
+Client
+- Name
+- Company
+- Role
+- Message
+- Rating

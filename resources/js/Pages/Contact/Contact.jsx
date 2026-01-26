@@ -6,7 +6,6 @@ import {
     FaFacebookSquare,
     FaInstagram,
     FaLinkedin,
-    FaWhatsapp,
 } from "react-icons/fa";
 
 export default function Contact() {
@@ -118,16 +117,14 @@ export default function Contact() {
                                 </div>
                             </div>
 
-                            <div>
-                                <div className="relative w-fit group mt-2">
-                                    <div className="absolute group-hover:rotate-2 group inset-0 bg-white border-[3px] border-zinc-900 translate-x-2 translate-y-1 z-0"></div>
-                                    <button
-                                        type="submit"
-                                        className="relative z-10 block w-fit text-lg font-bold px-5 py-2 bg-zinc-900 text-white transition rotate-2 group-hover:rotate-0"
-                                    >
-                                        Submit
-                                    </button>
-                                </div>
+                            <div className="relative w-fit group mt-2">
+                                <div className="absolute group-hover:rotate-2 group inset-0 bg-white border-[3px] border-zinc-900 translate-x-2 translate-y-1 z-0"></div>
+                                <button
+                                    type="submit"
+                                    className="relative z-10 block w-fit text-lg font-bold px-5 py-2 bg-zinc-900 text-white transition rotate-2 group-hover:rotate-0"
+                                >
+                                    Submit
+                                </button>
                             </div>
                         </form>
                     </div>
