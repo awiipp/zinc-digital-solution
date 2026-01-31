@@ -1,5 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function Article() {
     return (
@@ -11,9 +12,10 @@ export default function Article() {
                     <div className="max-w-4xl">
                         <Link
                             href={route("articles.index")}
-                            className="text-zinc-800 font-medium hover:text-zinc-600 mb-4 inline-block"
+                            className="text-zinc-800 font-medium hover:text-zinc-600 mb-4 flex items-center gap-2"
                         >
-                            ← Back to Articles
+                            <FaArrowLeft />
+                            Back to Articles
                         </Link>
                         <h1 className="text-5xl font-bold mt-4">
                             Choosing the Right Merchandise for Your Event

@@ -53,7 +53,7 @@ export default function CreateProduct() {
                                 <input
                                     type="text"
                                     name="name"
-                                    className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0"
+                                    className="relative border-2 border-zinc-900 w-full mt-1 focus:border-y-zinc-900 focus:border-[3px] focus:ring-0"
                                     value={data.name}
                                     onChange={(e) =>
                                         setData("name", e.target.value)
@@ -81,7 +81,7 @@ export default function CreateProduct() {
                                     type="file"
                                     accept="image/*"
                                     onChange={handleImageChange}
-                                    className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0 bg-white file:py-2 file:px-3 file:font-bold file:border-0 file:bg-zinc-900 file:text-white file:hover:cursor-pointer"
+                                    className="relative border-2 border-zinc-900 w-full mt-1 focus:border-y-zinc-900 focus:border-[3px] focus:ring-0 bg-white file:py-2 file:px-3 file:font-bold file:border-0 file:bg-zinc-900 file:text-white file:hover:cursor-pointer"
                                     required
                                 />
                             </div>
@@ -102,8 +102,8 @@ export default function CreateProduct() {
                                             e.preventDefault();
                                         }
                                     }}
-                                    name="introduction"
-                                    className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0 h-full"
+                                    name="description"
+                                    className="relative border-2 border-zinc-900 w-full mt-1 focus:border-y-zinc-900 focus:border-[3px] focus:ring-0 h-full"
                                     value={data.description}
                                     onChange={(e) =>
                                         setData("description", e.target.value)

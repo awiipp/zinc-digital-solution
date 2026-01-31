@@ -1,12 +1,16 @@
 Product
+- Product Code
 - Image
 - Name
 - Description
+- Harga
 
 Article
 - Image
 - Title
+- Excerpt
 - Slug
+- Status
 - Date (default)
 - Introduction
 - Body
@@ -25,7 +29,24 @@ Gallery
 
 Client
 - Name
+- Status
 - Company
 - Role
 - Message
 - Rating
+
+Message
+- Name
+- Email
+- Message
+
+Order
+- Order Number
+- Full name
+- Email
+- Whatsapp Number
+- Product (Model)
+- Order Quantity
+- Custom Note
+- Total Estimate
+- Status (Pending, Progress, Completed, Cancelled)

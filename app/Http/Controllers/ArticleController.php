@@ -12,6 +12,11 @@ class ArticleController extends Controller
         return Inertia::render('Articles/Articles');
     }
 
+    public function table()
+    {
+        return Inertia::render('Articles/ArticlesTable');
+    }
+
     public function create()
     {
         return Inertia::render('Articles/CreateArticle');
@@ -19,6 +24,6 @@ class ArticleController extends Controller
 
     public function show(string $id)
     {
-        return Inertia::render('Article/Article');
+        return Inertia::render('Articles/Article');
     }
 }

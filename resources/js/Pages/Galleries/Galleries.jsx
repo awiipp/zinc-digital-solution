@@ -14,8 +14,6 @@ export default function Galleries() {
             id: 2,
             title: "Custom Merchandise Display",
             image: "/images/product-test.jpeg",
-            description:
-                "Showcasing our custom-designed merchandise for promotional use.",
         },
         {
             id: 3,
@@ -28,8 +26,6 @@ export default function Galleries() {
             id: 4,
             title: "Creative Collaboration",
             image: "/images/product-test.jpeg",
-            description:
-                "A collaborative project with partners to deliver creative products.",
         },
     ];
 
@@ -70,9 +66,11 @@ export default function Galleries() {
                                         {gallery.title}
                                     </h3>
 
-                                    <p className="text-sm text-zinc-600">
-                                        {gallery.description}
-                                    </p>
+                                    {gallery.description && (
+                                        <p className="text-sm text-zinc-600">
+                                            {gallery.description}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </div>

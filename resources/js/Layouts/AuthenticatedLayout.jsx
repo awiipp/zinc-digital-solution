@@ -115,14 +115,13 @@ export default function AuthenticatedLayout({ header, children }) {
                                 </div>
                             </div>
                         ) : (
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                {/* <Link
+                            <div className="hidden space-x-8 sm:ms-10 sm:flex sm:items-center">
+                                <Link
                                     href={route("login")}
-                                    active={route().current("login")}
-                                    className="inline-flex items-center px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none"
+                                    className="inline-flex items-center px-3 py-1.5 text-sm font-bold leading-5"
                                 >
                                     Login
-                                </Link>*/}
+                                </Link>
                             </div>
                         )}
 
@@ -222,34 +221,81 @@ export default function AuthenticatedLayout({ header, children }) {
 
             <div className="flex">
                 <aside className="w-56 bg-white border-r min-h-screen fixed pt-20">
-                    <nav className="px-8 py-5 space-y-5 flex flex-col">
+                    <nav className="px-8 py-5 space-y-4 flex flex-col">
+                        {user && (
+                            <h1 className="font-bold text-2xl">Admin Panel</h1>
+                        )}
+
+                        {user && (
+                            <NavLink
+                                href={route("products.table")}
+                                active={route().current("products.*")}
+                            >
+                                Products
+                            </NavLink>
+                        )}
+
                         <NavLink
-                            href={route("articles.index")}
+                            href={
+                                user
+                                    ? route("articles.table")
+                                    : route("articles.index")
+                            }
                             active={route().current("articles.*")}
                         >
                             Articles
                         </NavLink>
 
                         <NavLink
-                            href={route("events.index")}
+                            href={
+                                user
+                                    ? route("events.table")
+                                    : route("events.index")
+                            }
                             active={route().current("events.*")}
                         >
                             Events
                         </NavLink>
 
                         <NavLink
-                            href={route("galleries.index")}
+                            href={
+                                user
+                                    ? route("galleries.table")
+                                    : route("galleries.index")
+                            }
                             active={route().current("galleries.*")}
                         >
                             Galleries
                         </NavLink>
 
                         <NavLink
-                            href={route("clients.index")}
+                            href={
+                                user
+                                    ? route("clients.table")
+                                    : route("clients.index")
+                            }
                             active={route().current("clients.*")}
                         >
                             Clients
                         </NavLink>
+
+                        {user && (
+                            <>
+                                <NavLink
+                                    href={route("orders.index")}
+                                    active={route().current("orders.*")}
+                                >
+                                    Orders
+                                </NavLink>
+
+                                <NavLink
+                                    href={route("messages.index")}
+                                    active={route().current("messages.*")}
+                                >
+                                    Messages
+                                </NavLink>
+                            </>
+                        )}
                     </nav>
                 </aside>
 

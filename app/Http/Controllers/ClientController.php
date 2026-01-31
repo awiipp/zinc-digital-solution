@@ -5,20 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class ProductController extends Controller
+class ClientController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Products/Products');
+        return Inertia::render('Clients/Clients');
     }
-    
+
     public function table()
     {
-        return Inertia::render('Products/ProductsTable');
+        return Inertia::render('Clients/ClientsTable');
     }
 
     public function create()
     {
-        return Inertia::render('Products/CreateProduct');
+        return Inertia::render('Clients/CreateClient');
     }
 }
