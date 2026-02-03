@@ -1,6 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
-import { useState } from "react";
+import { Head, useForm, usePage } from "@inertiajs/react";
+import { useState, useEffect } from "react";
 import {
     FaEnvelope,
     FaFacebookSquare,
@@ -9,7 +9,10 @@ import {
 } from "react-icons/fa";
 
 export default function Contact() {
-    const [data, setData] = useState({
+    const { flash } = usePage().props;
+    const [showModal, setShowModal] = useState(false);
+
+    const { data, setData, post } = useForm({
         name: "",
         email: "",
         message: "",
@@ -17,12 +20,36 @@ export default function Contact() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(data);
+        post(route("messages.store"), {
+            onSuccess: () => {
+                setShowModal(true);
+                setData({ name: "", email: "", message: "" });
+            },
+        });
     };
+
+    useEffect(() => {
+        if (flash?.success) {
+            setShowModal(true);
+        }
+    }, [flash]);
 
     return (
         <AuthenticatedLayout>
             <Head title="Contact" />
+
+            {flash?.success && (
+                <div className="fixed top-5 right-5 z-50">
+                    <div className="relative">
+                        <div className="absolute bg-zinc-900 inset-0 translate-x-2 translate-y-2"></div>
+                        <div className="relative bg-green-100 border-[3px] border-zinc-900 px-6 py-4">
+                            <p className="font-bold text-zinc-900">
+                                {flash.success}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <main className="mb-32">
                 <section className="flex justify-center mt-[90px] gap-16">
@@ -70,10 +97,7 @@ export default function Contact() {
                                         className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0"
                                         value={data.name}
                                         onChange={(e) =>
-                                            setData({
-                                                ...data,
-                                                name: e.target.value,
-                                            })
+                                            setData("name", e.target.value)
                                         }
                                         required
                                     />
@@ -89,10 +113,7 @@ export default function Contact() {
                                         className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0"
                                         value={data.email}
                                         onChange={(e) =>
-                                            setData({
-                                                ...data,
-                                                email: e.target.value,
-                                            })
+                                            setData("email", e.target.value)
                                         }
                                         required
                                     />
@@ -107,10 +128,7 @@ export default function Contact() {
                                         className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0"
                                         value={data.message}
                                         onChange={(e) =>
-                                            setData({
-                                                ...data,
-                                                message: e.target.value,
-                                            })
+                                            setData("message", e.target.value)
                                         }
                                         required
                                     />
@@ -130,6 +148,29 @@ export default function Contact() {
                     </div>
                 </section>
             </main>
+
+            {showModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="relative">
+                        <div className="absolute bg-zinc-900 inset-0 translate-x-2 translate-y-2"></div>
+                        <div className="relative bg-white border-[4px] border-zinc-900 p-8 w-96 text-center">
+                            <h2 className="text-2xl font-bold mb-4">
+                                Message Sent!
+                            </h2>
+                            <p className="mb-6">
+                                Your message has been successfully sent. We'll
+                                get back to you soon!
+                            </p>
+                            <button
+                                onClick={() => setShowModal(false)}
+                                className="px-6 py-2 bg-zinc-900 text-white font-bold border-[3px] border-zinc-900 hover:bg-zinc-700 transition"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </AuthenticatedLayout>
     );
 }

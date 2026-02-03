@@ -1,15 +1,16 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function CreateGallery() {
+export default function EditGallery({ gallery }) {
     const [preview, setPreview] = useState(null);
     const [descriptionLength, setDescriptionLength] = useState(0);
 
     const { data, setData, post } = useForm({
-        title: "",
+        title: gallery.title,
         image: null,
-        description: "",
+        description: gallery.description,
+        _method: "PUT",
     });
 
     const handleImageChange = (e) => {
@@ -38,10 +39,18 @@ export default function CreateGallery() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        post(route("galleries.store"), {
+        post(route("galleries.update", gallery.id), {
             forceFormData: true,
         });
     };
+
+    useEffect(() => {
+        if (gallery.image) {
+            setPreview(`/storage/${gallery.image}`);
+        }
+
+        setDescriptionLength(gallery.description.length);
+    }, [gallery.image]);
 
     return (
         <AuthenticatedLayout>
@@ -93,7 +102,6 @@ export default function CreateGallery() {
                                     accept="image/*"
                                     className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0 bg-white file:py-2 file:px-3 file:font-bold file:border-0 file:bg-zinc-900 file:text-white file:hover:cursor-pointer"
                                     onChange={handleImageChange}
-                                    required
                                 />
                             </div>
                             <p className="text-xs text-zinc-600 mt-4">

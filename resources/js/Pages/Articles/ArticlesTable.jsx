@@ -1,42 +1,28 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
-import { FaPlus } from "react-icons/fa";
+import { FaEdit, FaEye, FaPlus, FaTrash } from "react-icons/fa";
 
-export default function ArticlesTable() {
-    const articles = [
-        {
-            id: 1,
-            image: "/images/product-test.jpeg",
-            title: "Choosing the Right Merchandise for Your Event",
-            status: "Publised",
-            excerpt:
-                "Learn how the right merchandise can strengthen your brand presence and create memorable event experiences.",
-        },
-        {
-            id: 2,
-            image: "/images/product-test.jpeg",
-            title: "Why Custom Merchandise Matters for Branding",
-            status: "Publised",
-            excerpt:
-                "Custom products help brands communicate identity and values through tangible experiences.",
-        },
-        {
-            id: 3,
-            image: "/images/product-test.jpeg",
-            title: "Event Merchandise Trends in 2025",
-            status: "Publised",
-            excerpt:
-                "Discover the latest trends in event merchandise that brands are using to stand out.",
-        },
-        {
-            id: 4,
-            image: "/images/product-test.jpeg",
-            title: "Event Merchandise Trends in 2025",
-            status: "Draft",
-            excerpt:
-                "Discover the latest trends in event merchandise that brands are using to stand out.",
-        },
-    ];
+export default function ArticlesTable({ articles, status }) {
+    const activeStatus = status;
+
+    const getStatusBadge = (status) => {
+        const map = {
+            draft: "Draft",
+            published: "Published",
+        };
+
+        return map[status] ?? "-";
+    };
+
+    const filterClass = (status) => {
+        return `text-sm z-10 w-fit h-fit font-bold px-3 py-1 hover:bg-zinc-900 border-2 border-zinc-900 hover:text-white justify-center items-center gap-3 transition flex ${
+            activeStatus === status ? "bg-zinc-900 text-white" : "text-zinc-900"
+        }`;
+    };
+
+    const truncate = (text, length) => {
+        return text.length > length ? text.slice(0, length) + "..." : text;
+    };
 
     return (
         <AuthenticatedLayout>
@@ -53,14 +39,41 @@ export default function ArticlesTable() {
                 </div>
 
                 <section className="mt-10 w-full">
-                    <div className="relative w-fit mb-5">
+                    <div className="relative w-full mb-3 flex justify-between">
                         <Link
                             href={route("articles.create")}
-                            className="relative z-10 w-fit font-bold px-5 py-2 hover:bg-zinc-900 text-zinc-900 border-[3px] border-zinc-900 hover:text-white justify-center items-center gap-3 transition hover:rotate-2 flex"
+                            className="w-fit text-sm font-bold px-5 py-2 hover:bg-zinc-900 text-zinc-900 border-[3px] border-zinc-900 hover:text-white justify-center items-center gap-3 transition hover:rotate-2 flex"
                         >
                             <FaPlus />
-                            New Article
+                            New Product
                         </Link>
+                        <div className="flex gap-3 items-end">
+                            <Link
+                                href={route("articles.table")}
+                                className={filterClass("all")}
+                                preserveScroll
+                            >
+                                All
+                            </Link>
+                            <Link
+                                href={route("articles.table", {
+                                    status: "draft",
+                                })}
+                                className={filterClass("draft")}
+                                preserveScroll
+                            >
+                                Draft
+                            </Link>
+                            <Link
+                                href={route("articles.table", {
+                                    status: "published",
+                                })}
+                                className={filterClass("published")}
+                                preserveScroll
+                            >
+                                Published
+                            </Link>
+                        </div>
                     </div>
                     <div className="relative">
                         <div className="absolute inset-0 bg-zinc-900 translate-x-2 translate-y-2"></div>
@@ -88,39 +101,102 @@ export default function ArticlesTable() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {articles.map((article, index) => (
+                                {articles.data.map((article, index) => (
                                     <tr key={article.id}>
                                         <td className="text-sm border-b-[3px] border-zinc-900 text-center">
-                                            {index + 1}
+                                            {(articles.current_page - 1) *
+                                                articles.per_page +
+                                                index +
+                                                1}
                                         </td>
                                         <td className="text-sm border-b-[3px] border-zinc-900 py-3">
                                             <img
-                                                src={article.image}
+                                                src={`/storage/${article.image}`}
                                                 alt={article.title}
                                                 className="border-[3px] border-zinc-900 h-20 w-[130px] object-cover mx-auto"
                                             />
                                         </td>
                                         <td className="text-sm border-b-[3px] border-zinc-900 text-center">
-                                            {article.title}
+                                            {truncate(article.title, 55)}
                                         </td>
                                         <td className="text-sm border-b-[3px] border-zinc-900 px-5">
-                                            {article.excerpt}
+                                            {truncate(article.excerpt, 100)}
                                         </td>
                                         <td className="text-xs border-b-[3px] border-zinc-900 px-5">
-                                            <div>
-                                                <div></div>
-                                                <div className="text-center border-2 border-zinc-900 px-2 py-1 font-bold">
-                                                    {article.status}
-                                                </div>
+                                            <div className="text-center mx-auto border-2 w-fit border-zinc-900 px-5 py-1 font-bold">
+                                                {getStatusBadge(article.status)}
                                             </div>
                                         </td>
-                                        <td className="text-sm border-b-[3px] border-zinc-900 px-5"></td>
+                                        <td className="text-sm border-b-[3px] border-zinc-900 px-5">
+                                            <div className="flex justify-center items-center gap-2">
+                                                <Link
+                                                    href={route(
+                                                        "articles.show",
+                                                        article.slug,
+                                                    )}
+                                                    className="bg-zinc-900 text-white p-2 border-2 border-zinc-900 hover:bg-zinc-800 transition"
+                                                >
+                                                    <FaEye className="text-sm" />
+                                                </Link>
+
+                                                <Link
+                                                    href={route(
+                                                        "articles.edit",
+                                                        article.slug,
+                                                    )}
+                                                    className="border-2 border-zinc-900 p-2 hover:bg-zinc-300 transition"
+                                                >
+                                                    <FaEdit className="text-sm" />
+                                                </Link>
+
+                                                <Link
+                                                    href={route(
+                                                        "articles.destroy",
+                                                        article.slug,
+                                                    )}
+                                                    method="delete"
+                                                    as="button"
+                                                    onBefore={() =>
+                                                        confirm(
+                                                            "Are you sure you want to delete this article?",
+                                                        )
+                                                    }
+                                                    className="border-2 border-red-500 p-2 hover:bg-zinc-300 transition"
+                                                >
+                                                    <FaTrash className="text-sm" />
+                                                </Link>
+                                            </div>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
                 </section>
+
+                {articles.last_page > 1 && (
+                    <div className="flex justify-center items-center gap-2 mt-10">
+                        {articles.links.map((link, index) => (
+                            <Link
+                                key={index}
+                                href={link.url || "#"}
+                                preserveScroll
+                                className={`
+                                    px-3 py-1 border-2 border-zinc-900 font-bold text-sm transition
+                                    ${
+                                        link.active
+                                            ? "bg-zinc-900 text-white"
+                                            : "bg-white text-zinc-900 hover:bg-zinc-100"
+                                    }
+                                    ${!link.url && "opacity-40 pointer-events-none"}
+                                `}
+                                dangerouslySetInnerHTML={{
+                                    __html: link.label,
+                                }}
+                            />
+                        ))}
+                    </div>
+                )}
             </main>
         </AuthenticatedLayout>
     );

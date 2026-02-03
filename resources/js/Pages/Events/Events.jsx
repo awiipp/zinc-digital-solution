@@ -1,41 +1,14 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
-export default function Events() {
-    const events = [
-        {
-            id: 1,
-            title: "Brand Activation Expo 2024",
-            description:
-                "We supported this event with custom merchandise and on-site branding solutions.",
-            date: "March 2024",
-            location: "Jakarta",
-        },
-        {
-            id: 2,
-            title: "Creative Market Festival",
-            description:
-                "Showcasing our creative merchandise and collaborating with local brands.",
-            date: "July 2024",
-            location: "Bandung",
-        },
-        {
-            id: 3,
-            title: "Corporate Gathering & Product Launch",
-            description:
-                "Providing exclusive corporate gift sets and event merchandise.",
-            date: "October 2024",
-            location: "Surabaya",
-        },
-        {
-            id: 4,
-            title: "Corporate Gathering & Product Launch",
-            description:
-                "Providing exclusive corporate gift sets and event merchandise.",
-            date: "October 2024",
-            location: "Surabaya",
-        },
-    ];
+export default function Events({ events }) {
+    const formatDate = (dateString) => {
+        return new Date(dateString).toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+        });
+    };
 
     return (
         <AuthenticatedLayout>
@@ -55,39 +28,56 @@ export default function Events() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-3 gap-8 px-20 pb-32">
-                    {events.map((event) => (
-                        <div className="relative">
-                            <div className="absolute inset-0 bg-zinc-900 translate-x-2 translate-y-2"></div>
-                            <div className="relative hover:rotate-2 h-full border-[3px] border-zinc-900  bg-white hover:shadow-md transition">
-                                <img
-                                    src="/images/product-test.jpeg"
-                                    alt="Event"
-                                    className="w-full h-48 object-cover"
-                                />
-
-                                <div className="p-6">
-                                    <h3 className="text-xl font-semibold mb-2">
-                                        {event.title}
-                                    </h3>
-
-                                    <p className="text-sm text-zinc-600 mb-4">
-                                        {event.description}
-                                    </p>
-
-                                    <div className="text-sm text-zinc-500 mb-5">
-                                        <p>{event.date}</p>
-                                        <p>{event.location}</p>
-                                    </div>
-
-                                    <button className="text-sm font-medium underline underline-offset-4">
-                                        View Event
-                                    </button>
-                                </div>
+                <section className="px-20 pb-32">
+                    {events.length === 0 ? (
+                        <div className="relative max-w-2xl mx-auto mt-20">
+                            <div className="absolute bg-zinc-400 inset-0 translate-x-2 translate-y-2"></div>
+                            <div className="relative bg-white border-4 border-zinc-400 p-12 text-center">
+                                <h2 className="text-3xl font-bold text-zinc-400 mb-4">
+                                    No Events Yet
+                                </h2>
+                                <p className="text-lg text-zinc-400">
+                                    We're preparing exciting events for you.
+                                    Please check back soon!
+                                </p>
                             </div>
                         </div>
-                    ))}
-                </div>
+                    ) : (
+                        <div className="grid grid-cols-3 gap-8">
+                            {events.map((event) => (
+                                <div className="relative h-fit">
+                                    <div className="absolute inset-0 bg-zinc-900 translate-x-1.5 translate-y-1.5"></div>
+                                    <div className="relative hover:translate-x-1.5 hover:translate-y-1.5 h-full border-[3px] border-zinc-900  bg-white hover:shadow-md transition">
+                                        <img
+                                            src={`/storage/${event.image}`}
+                                            alt={event.title}
+                                            className="w-full h-48 object-cover"
+                                        />
+
+                                        <div className="p-6">
+                                            <h3 className="text-xl font-semibold mb-2">
+                                                {event.title}
+                                            </h3>
+
+                                            <p className="text-sm text-zinc-600 mb-4">
+                                                {event.description}
+                                            </p>
+
+                                            <div className="text-sm text-zinc-900 mb-5">
+                                                <p>
+                                                    {formatDate(
+                                                        event.event_date,
+                                                    )}
+                                                </p>
+                                                <p>{event.location}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </section>
             </main>
         </AuthenticatedLayout>
     );

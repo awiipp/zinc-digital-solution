@@ -1,34 +1,11 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
-import { FaPlus } from "react-icons/fa";
+import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 
-export default function GalleriesTable() {
-    const galleries = [
-        {
-            id: 1,
-            title: "Brand Activation Event",
-            image: "/images/product-test.jpeg",
-            description:
-                "Creative merchandise and branding setup for a brand activation event.",
-        },
-        {
-            id: 2,
-            title: "Custom Merchandise Display",
-            image: "/images/product-test.jpeg",
-        },
-        {
-            id: 3,
-            title: "Corporate Event Setup",
-            image: "/images/product-test.jpeg",
-            description:
-                "Event merchandise and visual branding for a corporate gathering.",
-        },
-        {
-            id: 4,
-            title: "Creative Collaboration",
-            image: "/images/product-test.jpeg",
-        },
-    ];
+export default function GalleriesTable({ galleries }) {
+    const truncate = (text, length) => {
+        return text.length > length ? text.slice(0, length) + "..." : text;
+    };
 
     return (
         <AuthenticatedLayout>
@@ -45,7 +22,7 @@ export default function GalleriesTable() {
                 </div>
 
                 <section className="mt-10 w-full">
-                    <div className="relative w-fit mb-5">
+                    <div className="relative w-fit mb-3">
                         <Link
                             href={route("galleries.create")}
                             className="relative z-10 w-fit font-bold px-5 py-2 hover:bg-zinc-900 text-zinc-900 border-[3px] border-zinc-900 hover:text-white justify-center items-center gap-3 transition hover:rotate-2 flex"
@@ -77,37 +54,96 @@ export default function GalleriesTable() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {galleries.map((gallery, index) => (
+                                {galleries.data.map((gallery, index) => (
                                     <tr key={gallery.id}>
                                         <td className="text-sm border-b-[3px] border-zinc-900 text-center">
-                                            {index + 1}
+                                            {(galleries.current_page - 1) *
+                                                galleries.per_page +
+                                                index +
+                                                1}
                                         </td>
                                         <td className="text-sm border-b-[3px] border-zinc-900 py-3">
                                             <img
-                                                src={gallery.image}
+                                                src={`/storage/${gallery.image}`}
                                                 alt={gallery.title}
                                                 className="border-[3px] border-zinc-900 h-20 w-[130px] object-cover mx-auto"
                                             />
                                         </td>
                                         <td className="text-sm border-b-[3px] border-zinc-900 text-center">
-                                            {gallery.title}
+                                            {truncate(gallery.title, 70)}
                                         </td>
                                         <td className="text-sm border-b-[3px] border-zinc-900 px-5">
                                             {gallery.description ? (
-                                                gallery.description
+                                                truncate(
+                                                    gallery.description,
+                                                    200,
+                                                )
                                             ) : (
                                                 <p className="text-zinc-500">
                                                     no description
                                                 </p>
                                             )}
                                         </td>
-                                        <td className="text-sm border-b-[3px] border-zinc-900 px-5"></td>
+                                        <td className="text-sm border-b-[3px] border-zinc-900 px-5">
+                                            <div className="flex justify-center items-center gap-2">
+                                                <Link
+                                                    href={route(
+                                                        "galleries.edit",
+                                                        gallery.id,
+                                                    )}
+                                                    className="border-2 border-zinc-900 p-2 hover:bg-zinc-300 transition"
+                                                >
+                                                    <FaEdit className="text-sm" />
+                                                </Link>
+
+                                                <Link
+                                                    href={route(
+                                                        "galleries.destroy",
+                                                        gallery.id,
+                                                    )}
+                                                    method="delete"
+                                                    as="button"
+                                                    onBefore={() =>
+                                                        confirm(
+                                                            "Are you sure you want to delete this gallery?",
+                                                        )
+                                                    }
+                                                    className="border-2 border-red-500 p-2 hover:bg-zinc-300 transition"
+                                                >
+                                                    <FaTrash className="text-sm" />
+                                                </Link>
+                                            </div>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
                 </section>
+
+                {galleries.last_page > 1 && (
+                    <div className="flex justify-center items-center gap-2 mt-10">
+                        {galleries.links.map((link, index) => (
+                            <Link
+                                key={index}
+                                href={link.url || "#"}
+                                preserveScroll
+                                className={`
+                                    px-3 py-1 border-2 border-zinc-900 font-bold text-sm transition
+                                    ${
+                                        link.active
+                                            ? "bg-zinc-900 text-white"
+                                            : "bg-white text-zinc-900 hover:bg-zinc-100"
+                                    }
+                                    ${!link.url && "opacity-40 pointer-events-none"}
+                                `}
+                                dangerouslySetInnerHTML={{
+                                    __html: link.label,
+                                }}
+                            />
+                        ))}
+                    </div>
+                )}
             </main>
         </AuthenticatedLayout>
     );

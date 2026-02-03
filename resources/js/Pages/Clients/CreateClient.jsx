@@ -12,17 +12,16 @@ export default function CreateClient() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(data);
+
+        post(route("clients.store"));
     };
 
     return (
         <AuthenticatedLayout>
-            <Head title="Create Client" />
+            <Head title="Create Review" />
 
             <main className="px-20 pt-14 min-h-screen">
-                <h1 className="text-4xl font-bold mb-10">
-                    Create Client Review
-                </h1>
+                <h1 className="text-4xl font-bold mb-10">Create Review</h1>
 
                 <section className="max-w-4xl pb-32">
                     <form
@@ -103,7 +102,7 @@ export default function CreateClient() {
                                         <span
                                             className={
                                                 star <= data.rating
-                                                    ? "text-yellow-400"
+                                                    ? "text-zinc-900"
                                                     : "text-gray-300"
                                             }
                                         >
@@ -140,9 +139,13 @@ export default function CreateClient() {
                                     required
                                 />
                             </div>
+                            <p className="text-sm mt-7 font-medium">
+                                (Your review has a chance to be featured on our
+                                Clients & Reviews page)
+                            </p>
                         </div>
 
-                        <div className="relative w-fit group mt-2">
+                        <div className="relative w-fit group">
                             <div className="absolute group-hover:rotate-2 group inset-0 bg-white border-[3px] border-zinc-900 translate-x-2 translate-y-1 z-0"></div>
                             <button
                                 type="submit"

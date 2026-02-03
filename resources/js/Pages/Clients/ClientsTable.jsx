@@ -1,70 +1,35 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
-import { FaPlus, FaStar } from "react-icons/fa";
+import {
+    FaCheck,
+    FaEdit,
+    FaPlus,
+    FaStar,
+    FaTimes,
+    FaTrash,
+} from "react-icons/fa";
 
-export default function ClientsTable() {
-    const clients = [
-        {
-            id: 1,
-            name: "Sarah Johnson",
-            company: "Tech Innovators Inc.",
-            role: "Marketing Director",
-            status: "Pending",
-            message:
-                "Outstanding quality and service! The custom merchandise exceeded our expectations for our annual tech conference.",
-            rating: 4,
-        },
-        {
-            id: 2,
-            name: "Michael Chen",
-            company: "Green Earth Foundation",
-            role: "Event Coordinator",
-            status: "Pending",
-            message:
-                "Professional team with great attention to detail. Our eco-friendly tote bags were a huge hit at the sustainability summit.",
-            rating: 5,
-        },
-        {
-            id: 3,
-            name: "Amanda Williams",
-            company: "Startup Hub",
-            role: "Community Manager",
-            status: "Pending",
-            message:
-                "Fast turnaround and creative solutions. They helped us create unique swag for our startup pitch event.",
-            rating: 5,
-        },
-        {
-            id: 4,
-            name: "David Rodriguez",
-            company: "Metro Sports Club",
-            role: "Brand Manager",
-            status: "Accepted",
-            message:
-                "The custom apparel quality is top-notch. Our team members love their branded gear!",
-            rating: 5,
-        },
-        {
-            id: 5,
-            name: "Lisa Anderson",
-            company: "Creative Agency Co.",
-            role: "CEO",
-            status: "Accepted",
-            message:
-                "Excellent collaboration from start to finish. They understood our vision and delivered perfectly.",
-            rating: 2,
-        },
-        {
-            id: 6,
-            name: "James Parker",
-            company: "University Student Union",
-            role: "President",
-            status: "Pending",
-            message:
-                "Great pricing for students and amazing product quality. Highly recommend for any campus event!",
-            rating: 5,
-        },
-    ];
+export default function ClientsTable({ clients, status }) {
+    const activeStatus = status;
+
+    const getStatusLabel = (status) => {
+        const map = {
+            draft: "Draft",
+            published: "Published",
+        };
+
+        return map[status] ?? "-";
+    };
+
+    const filterClass = (status) => {
+        return `text-sm z-10 w-fit h-fit font-bold px-3 py-1 hover:bg-zinc-900 border-2 border-zinc-900 hover:text-white justify-center items-center gap-3 transition flex ${
+            activeStatus === status ? "bg-zinc-900 text-white" : "text-zinc-900"
+        }`;
+    };
+
+    const truncate = (text, length) => {
+        return text.length > length ? text.slice(0, length) + "..." : text;
+    };
 
     return (
         <AuthenticatedLayout>
@@ -74,21 +39,48 @@ export default function ClientsTable() {
                 <div className="">
                     <h1 className="text-5xl font-bold">
                         <span className="underline decoration-4 underline-offset-[10px] decoration-zinc-900">
-                            Clients
+                            Reviews
                         </span>{" "}
                         Table
                     </h1>
                 </div>
 
                 <section className="mt-10 w-full">
-                    <div className="relative w-fit mb-5">
+                    <div className="relative w-full mb-3 flex justify-between">
                         <Link
                             href={route("clients.create")}
-                            className="relative z-10 w-fit font-bold px-5 py-2 hover:bg-zinc-900 text-zinc-900 border-[3px] border-zinc-900 hover:text-white justify-center items-center gap-3 transition hover:rotate-2 flex"
+                            className="w-fit text-sm font-bold px-5 py-2 hover:bg-zinc-900 text-zinc-900 border-[3px] border-zinc-900 hover:text-white justify-center items-center gap-3 transition hover:rotate-2 flex"
                         >
                             <FaPlus />
-                            New Client
+                            New Review
                         </Link>
+                        <div className="flex gap-3 items-end">
+                            <Link
+                                href={route("clients.table")}
+                                className={filterClass("all")}
+                                preserveScroll
+                            >
+                                All
+                            </Link>
+                            <Link
+                                href={route("clients.table", {
+                                    status: "draft",
+                                })}
+                                className={filterClass("draft")}
+                                preserveScroll
+                            >
+                                Draft
+                            </Link>
+                            <Link
+                                href={route("clients.table", {
+                                    status: "published",
+                                })}
+                                className={filterClass("published")}
+                                preserveScroll
+                            >
+                                Published
+                            </Link>
+                        </div>
                     </div>
                     <div className="relative">
                         <div className="absolute inset-0 bg-zinc-900 translate-x-2 translate-y-2"></div>
@@ -119,7 +111,7 @@ export default function ClientsTable() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {clients.map((client, index) => (
+                                {clients.data.map((client, index) => (
                                     <tr key={client.id}>
                                         <td className="text-sm border-b-[3px] border-zinc-900 text-center">
                                             {index + 1}
@@ -128,10 +120,17 @@ export default function ClientsTable() {
                                             {client.name}
                                         </td>
                                         <td className="text-sm border-b-[3px] border-zinc-900 text-center">
-                                            {client.company}
+                                            {client.company}, <br />
+                                            {client.role ? (
+                                                client.role
+                                            ) : (
+                                                <span className="text-zinc-500">
+                                                    no role
+                                                </span>
+                                            )}
                                         </td>
                                         <td className="text-sm border-b-[3px] border-zinc-900 px-5 py-2">
-                                            {client.message}
+                                            {truncate(client.message, 200)}
                                         </td>
                                         <td className="text-sm w-[90px] border-b-[3px] border-zinc-900 px-5">
                                             <div className="flex justify-center flex-wrap w-full gap-1">
@@ -148,20 +147,100 @@ export default function ClientsTable() {
                                             </div>
                                         </td>
                                         <td className="text-xs border-b-[3px] border-zinc-900 px-5">
-                                            <div>
-                                                <div></div>
-                                                <div className="text-center border-2 border-zinc-900 px-2 py-1 font-bold">
-                                                    {client.status}
+                                            <div className="min-h-14 flex items-center w-full">
+                                                <div className="text-center mx-auto border-2 w-fit border-zinc-900 px-5 py-1 font-bold">
+                                                    {getStatusLabel(
+                                                        client.status,
+                                                    )}
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="text-sm border-b-[3px] border-zinc-900 px-5"></td>
+                                        <td className="text-sm border-b-[3px] border-zinc-900 px-5">
+                                            <div className="flex justify-center items-center gap-2">
+                                                {client.status === "draft" ? (
+                                                    <Link
+                                                        href={route(
+                                                            "clients.publish",
+                                                            client.id,
+                                                        )}
+                                                        method="put"
+                                                        as="button"
+                                                        className="border-2 border-zinc-900 bg-zinc-900 text-white p-2 hover:bg-zinc-700 transition"
+                                                    >
+                                                        <FaCheck className="text-sm" />
+                                                    </Link>
+                                                ) : (
+                                                    <Link
+                                                        href={route(
+                                                            "clients.draft",
+                                                            client.id,
+                                                        )}
+                                                        method="put"
+                                                        as="button"
+                                                        className="border-2 border-zinc-900 p-2 bg-zinc-300 hover:bg-white transition"
+                                                    >
+                                                        <FaTimes className="text-sm" />
+                                                    </Link>
+                                                )}
+
+                                                <Link
+                                                    href={route(
+                                                        "clients.edit",
+                                                        client.id,
+                                                    )}
+                                                    className="border-2 border-zinc-900 p-2 hover:bg-zinc-300 transition"
+                                                >
+                                                    <FaEdit className="text-sm" />
+                                                </Link>
+
+                                                <Link
+                                                    href={route(
+                                                        "clients.destroy",
+                                                        client.id,
+                                                    )}
+                                                    method="delete"
+                                                    as="button"
+                                                    onBefore={() =>
+                                                        confirm(
+                                                            "Are you sure you want to delete this client review?",
+                                                        )
+                                                    }
+                                                    className="border-2 border-red-500 p-2 hover:bg-zinc-300 transition"
+                                                >
+                                                    <FaTrash className="text-sm" />
+                                                </Link>
+                                            </div>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
                 </section>
+
+                {clients.last_page > 1 && (
+                    <div className="flex justify-center items-center gap-2 mt-10">
+                        {clients.links.map((link, index) => (
+                            <Link
+                                key={index}
+                                href={link.url || "#"}
+                                preserveScroll
+                                className={`
+                                    px-3 py-1 border-2 border-zinc-900 font-bold text-sm transition
+                                    ${
+                                        link.active
+                                            ? "bg-zinc-900 text-white"
+                                            : "bg-white text-zinc-900 hover:bg-zinc-100"
+                                    }
+                                    ${!link.url && "opacity-40 pointer-events-none"}
+                                `}
+                                dangerouslySetInnerHTML={{
+                                    __html: link.label,
+                                }}
+                            />
+                        ))}
+                    </div>
+                )}
             </main>
         </AuthenticatedLayout>
     );

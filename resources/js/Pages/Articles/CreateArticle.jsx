@@ -4,10 +4,13 @@ import { useState } from "react";
 
 export default function CreateArticle() {
     const [preview, setPreview] = useState(null);
+    const [excerptLength, setExcerptLength] = useState(0);
 
     const { data, setData, post } = useForm({
         title: "",
         image: null,
+        status: "",
+        excerpt: "",
         introduction: "",
         body: "",
         conclusion: "",
@@ -29,9 +32,19 @@ export default function CreateArticle() {
         }
     };
 
+    const handleExcerptChange = (e) => {
+        const value = e.target.value;
+
+        setData("excerpt", value);
+        setExcerptLength(value.length);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(data);
+
+        post(route("articles.store"), {
+            forceFormData: true,
+        });
     };
 
     return (
@@ -92,8 +105,65 @@ export default function CreateArticle() {
                         </div>
 
                         <div className="flex flex-col">
+                            <label className="text-xl font-bold">Status</label>
+                            <div className="relative">
+                                <div className="absolute bg-zinc-900 inset-0 translate-x-1.5 translate-y-2"></div>
+                                <select
+                                    className="relative w-full mt-1 border-2 border-zinc-900 appearance-none focus:outline-none focus:ring-0 focus:border-zinc-900 focus:border-[3px]"
+                                    name="status"
+                                    value={data.status}
+                                    onChange={(e) =>
+                                        setData("status", e.target.value)
+                                    }
+                                    required
+                                >
+                                    <option
+                                        className="focus:border-y-zinc-900 focus:border-[3px] focus:ring-0"
+                                        value="draft"
+                                    >
+                                        Draft
+                                    </option>
+                                    <option
+                                        className="focus:border-y-zinc-900 focus:border-[3px] focus:ring-0"
+                                        value="published"
+                                    >
+                                        Published
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col">
                             <label className="text-xl font-bold">
-                                Introduction
+                                Excerpt{" "}
+                                <span className="text-xs text-zinc-900 font-regular">
+                                    (recomended excerpt length is 200 chars.
+                                    Currently: {excerptLength})
+                                </span>
+                            </label>
+                            <div className="relative h-[120px]">
+                                <div className="absolute bg-zinc-900 inset-0 translate-x-2 translate-y-3"></div>
+                                <textarea
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            e.preventDefault();
+                                        }
+                                    }}
+                                    name="excerpt"
+                                    className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-900 focus:border-[3px] focus:ring-0 h-full resize-none"
+                                    value={data.excerpt}
+                                    onChange={handleExcerptChange}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label className="text-xl font-bold">
+                                Introduction{" "}
+                                <span className="text-xs font-regular">
+                                    (optional)
+                                </span>
                             </label>
                             <div className="relative h-[120px]">
                                 <div className="absolute bg-zinc-900 inset-0 translate-x-2 translate-y-3"></div>
@@ -109,7 +179,6 @@ export default function CreateArticle() {
                                     onChange={(e) =>
                                         setData("introduction", e.target.value)
                                     }
-                                    required
                                 />
                             </div>
                         </div>
@@ -134,7 +203,10 @@ export default function CreateArticle() {
 
                         <div className="flex flex-col">
                             <label className="text-xl font-bold">
-                                Conclusion
+                                Conclusion{" "}
+                                <span className="text-xs font-regular">
+                                    (optional)
+                                </span>
                             </label>
                             <div className="relative h-[120px]">
                                 <div className="absolute bg-zinc-900 inset-0 translate-x-2 translate-y-3"></div>
@@ -150,7 +222,6 @@ export default function CreateArticle() {
                                     onChange={(e) =>
                                         setData("conclusion", e.target.value)
                                     }
-                                    required
                                 />
                             </div>
                         </div>

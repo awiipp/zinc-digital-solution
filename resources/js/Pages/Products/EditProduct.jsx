@@ -1,16 +1,17 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function CreateProduct() {
-    const [preview, setPreview] = useState(null);
+export default function editProduct({ product }) {
+    const [preview, setPreview] = useState();
 
     const { data, setData, post } = useForm({
-        name: "",
+        name: product.name,
         image: null,
-        status: "",
-        price: "",
-        description: "",
+        price: product.price,
+        status: product.status,
+        description: product.description,
+        _method: "PUT",
     });
 
     const handleImageChange = (e) => {
@@ -32,17 +33,23 @@ export default function CreateProduct() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        post(route("products.store"), {
+        post(route("products.update", product.product_code), {
             forceFormData: true,
         });
     };
 
+    useEffect(() => {
+        if (product.image) {
+            setPreview(`/storage/${product.image}`);
+        }
+    }, [product.image]);
+
     return (
         <AuthenticatedLayout>
-            <Head title="Create Product" />
+            <Head title="Edit Product" />
 
             <main className="px-20 pt-14 min-h-screen">
-                <h1 className="text-4xl font-bold mb-10">Create New Product</h1>
+                <h1 className="text-4xl font-bold mb-10">Edit Product</h1>
 
                 <section className="max-w-4xl pb-32">
                     <form
@@ -87,46 +94,11 @@ export default function CreateProduct() {
                                     accept="image/*"
                                     onChange={handleImageChange}
                                     className="relative border-2 border-zinc-900 w-full mt-1 focus:border-y-zinc-900 focus:border-[3px] focus:ring-0 bg-white file:py-2 file:px-3 file:font-bold file:border-0 file:bg-zinc-900 file:text-white file:hover:cursor-pointer"
-                                    required
                                 />
                             </div>
                             <p className="text-xs text-zinc-600 mt-4">
                                 Max file size: 2MB. Formats: JPG, PNG, GIF
                             </p>
-                        </div>
-
-                        <div className="flex flex-col">
-                            <label className="text-xl font-bold">Status</label>
-                            <div className="relative">
-                                <div className="absolute bg-zinc-900 inset-0 translate-x-1.5 translate-y-2"></div>
-                                <select
-                                    className="relative w-full mt-1 border-2 border-zinc-900 appearance-none focus:outline-none focus:ring-0 focus:border-zinc-900 focus:border-[3px]"
-                                    value={data.status}
-                                    onChange={(e) =>
-                                        setData("status", e.target.value)
-                                    }
-                                    required
-                                >
-                                    <option
-                                        className="focus:border-y-zinc-900 focus:border-[3px] focus:ring-0"
-                                        value=""
-                                    >
-                                        Select Status
-                                    </option>
-                                    <option
-                                        className="focus:border-y-zinc-900 focus:border-[3px] focus:ring-0"
-                                        value="available"
-                                    >
-                                        Available
-                                    </option>
-                                    <option
-                                        className="focus:border-y-zinc-900 focus:border-[3px] focus:ring-0"
-                                        value="soldout"
-                                    >
-                                        Sold out
-                                    </option>
-                                </select>
-                            </div>
                         </div>
 
                         <div className="flex flex-col">
@@ -148,6 +120,34 @@ export default function CreateProduct() {
                                     }
                                     required
                                 />
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col">
+                            <label className="text-xl font-bold">Status</label>
+                            <div className="relative">
+                                <div className="absolute bg-zinc-900 inset-0 translate-x-1.5 translate-y-2"></div>
+                                <select
+                                    className="relative w-full mt-1 border-2 border-zinc-900 appearance-none focus:outline-none focus:ring-0 focus:border-zinc-900 focus:border-[3px]"
+                                    value={data.status}
+                                    onChange={(e) =>
+                                        setData("status", e.target.value)
+                                    }
+                                    required
+                                >
+                                    <option
+                                        className="focus:border-y-zinc-900 focus:border-[3px] focus:ring-0"
+                                        value="available"
+                                    >
+                                        Available
+                                    </option>
+                                    <option
+                                        className="focus:border-y-zinc-900 focus:border-[3px] focus:ring-0"
+                                        value="soldout"
+                                    >
+                                        Sold out
+                                    </option>
+                                </select>
                             </div>
                         </div>
 

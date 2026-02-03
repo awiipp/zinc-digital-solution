@@ -1,16 +1,26 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function CreateGallery() {
-    const [preview, setPreview] = useState(null);
+export default function EditEvent({ event }) {
+    const [preview, setPreview] = useState();
     const [descriptionLength, setDescriptionLength] = useState(0);
 
     const { data, setData, post } = useForm({
-        title: "",
+        title: event.title,
         image: null,
-        description: "",
+        location: event.location,
+        event_date: event.event_date,
+        description: event.description,
+        _method: "PUT",
     });
+
+    const handleDescriptionChange = (e) => {
+        const value = e.target.value;
+
+        setData("description", value);
+        setDescriptionLength(value.length);
+    };
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -28,36 +38,37 @@ export default function CreateGallery() {
         }
     };
 
-    const handleDescriptionChange = (e) => {
-        const value = e.target.value;
-
-        setData("description", value);
-        setDescriptionLength(value.length);
-    };
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        post(route("galleries.store"), {
+        post(route("events.update", event.id), {
             forceFormData: true,
         });
     };
 
+    useEffect(() => {
+        if (event.image) {
+            setPreview(`/storage/${event.image}`);
+        }
+
+        setDescriptionLength(data.description.length);
+    }, [event.image]);
+
     return (
         <AuthenticatedLayout>
-            <Head title="Create Gallery" />
+            <Head title="Edit Event" />
 
-            <main className="px-20 pt-14 min-h-screen">
-                <h1 className="text-4xl font-bold mb-10">Create New Gallery</h1>
+            <main className="px-24 pt-14 min-h-screen">
+                <h1 className="text-4xl font-bold mb-10">Edit Event</h1>
 
-                <section className="max-w-4xl pb-32">
+                <section className="pb-32">
                     <form
-                        onSubmit={handleSubmit}
                         className="flex flex-col gap-10"
+                        onSubmit={handleSubmit}
                     >
                         <div className="flex flex-col">
                             <label className="text-xl font-bold">
-                                Image Title
+                                Event Title
                             </label>
                             <div className="relative">
                                 <div className="absolute bg-zinc-900 inset-0 translate-x-1.5 translate-y-2"></div>
@@ -91,9 +102,8 @@ export default function CreateGallery() {
                                 <input
                                     type="file"
                                     accept="image/*"
-                                    className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0 bg-white file:py-2 file:px-3 file:font-bold file:border-0 file:bg-zinc-900 file:text-white file:hover:cursor-pointer"
                                     onChange={handleImageChange}
-                                    required
+                                    className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0 bg-white file:py-2 file:px-3 file:font-bold file:border-0 file:bg-zinc-900 file:text-white file:hover:cursor-pointer"
                                 />
                             </div>
                             <p className="text-xs text-zinc-600 mt-4">
@@ -101,12 +111,55 @@ export default function CreateGallery() {
                             </p>
                         </div>
 
+                        <div className="flex gap-14">
+                            <div className="flex flex-col flex-1">
+                                <label className="text-xl font-bold">
+                                    Location
+                                </label>
+                                <div className="relative">
+                                    <div className="absolute bg-zinc-900 inset-0 translate-x-1.5 translate-y-2"></div>
+                                    <input
+                                        type="text"
+                                        name="location"
+                                        className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0"
+                                        value={data.location}
+                                        onChange={(e) =>
+                                            setData("location", e.target.value)
+                                        }
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col flex-1">
+                                <label className="text-xl font-bold">
+                                    Date
+                                </label>
+                                <div className="relative">
+                                    <div className="absolute bg-zinc-900 inset-0 translate-x-1.5 translate-y-2"></div>
+                                    <input
+                                        type="date"
+                                        name="event_date"
+                                        className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0"
+                                        value={data.event_date}
+                                        onChange={(e) =>
+                                            setData(
+                                                "event_date",
+                                                e.target.value,
+                                            )
+                                        }
+                                        required
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
                         <div className="flex flex-col">
                             <label className="text-xl font-bold">
-                                Description
-                                <span className="text-xs font-regular ml-1">
-                                    (optional. Max chars is 200. Currently:{" "}
-                                    {descriptionLength})
+                                Description{" "}
+                                <span className="text-xs text-zinc-900 font-regular">
+                                    (max description length is 200 chars.
+                                    Currently: {descriptionLength})
                                 </span>
                             </label>
                             <div className="relative h-[100px]">
@@ -119,9 +172,10 @@ export default function CreateGallery() {
                                     }}
                                     name="description"
                                     className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0 h-full"
-                                    maxLength={200}
                                     value={data.description}
+                                    maxLength={200}
                                     onChange={handleDescriptionChange}
+                                    required
                                 />
                             </div>
                         </div>

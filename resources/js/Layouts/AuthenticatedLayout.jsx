@@ -227,12 +227,21 @@ export default function AuthenticatedLayout({ header, children }) {
                         )}
 
                         {user && (
-                            <NavLink
-                                href={route("products.table")}
-                                active={route().current("products.*")}
-                            >
-                                Products
-                            </NavLink>
+                            <>
+                                <NavLink
+                                    href={route("dashboard")}
+                                    active={route().current("dashboard")}
+                                >
+                                    Dashboard
+                                </NavLink>
+
+                                <NavLink
+                                    href={route("products.table")}
+                                    active={route().current("products.*")}
+                                >
+                                    Products
+                                </NavLink>
+                            </>
                         )}
 
                         <NavLink

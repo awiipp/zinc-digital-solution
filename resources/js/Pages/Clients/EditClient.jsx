@@ -1,122 +1,69 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
-import { useState } from "react";
 
-export default function CreateEvent() {
-    const [preview, setPreview] = useState(null);
-    const [descriptionLength, setDescriptionLength] = useState(0);
-
+export default function CreateClient({ client }) {
     const { data, setData, post } = useForm({
-        title: "",
-        image: null,
-        location: "",
-        event_date: "",
-        description: "",
+        name: client.name,
+        company: client.company,
+        role: client.role,
+        rating: client.rating,
+        message: client.message,
+        _method: "PUT",
     });
-
-    const handleDescriptionChange = (e) => {
-        const value = e.target.value;
-
-        setData("description", value);
-        setDescriptionLength(value.length);
-    };
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-
-        if (file) {
-            const reader = new FileReader();
-
-            reader.onload = () => {
-                setPreview(reader.result);
-            };
-
-            reader.readAsDataURL(file);
-
-            setData("image", file);
-        }
-    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        post(route("events.store"), {
-            forceFormData: true,
-        });
+        post(route("clients.update", client.id));
     };
 
     return (
         <AuthenticatedLayout>
-            <Head title="Create Event" />
+            <Head title="Create Client" />
 
-            <main className="px-24 pt-14 min-h-screen">
-                <h1 className="text-4xl font-bold mb-10">Create New Event</h1>
+            <main className="px-20 pt-14 min-h-screen">
+                <h1 className="text-4xl font-bold mb-10">
+                    Create Client Review
+                </h1>
 
-                <section className="pb-32">
+                <section className="max-w-4xl pb-32">
                     <form
-                        className="flex flex-col gap-10"
                         onSubmit={handleSubmit}
+                        className="flex flex-col gap-10"
                     >
                         <div className="flex flex-col">
                             <label className="text-xl font-bold">
-                                Event Title
+                                Client Name
                             </label>
                             <div className="relative">
                                 <div className="absolute bg-zinc-900 inset-0 translate-x-1.5 translate-y-2"></div>
                                 <input
                                     type="text"
-                                    name="title"
+                                    name="name"
                                     className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0"
-                                    value={data.title}
+                                    value={data.name}
                                     onChange={(e) =>
-                                        setData("title", e.target.value)
+                                        setData("name", e.target.value)
                                     }
                                     required
                                 />
                             </div>
                         </div>
 
-                        <div className="flex flex-col">
-                            <label className="text-xl font-bold">
-                                Thumbnail
-                            </label>
-
-                            {preview && (
-                                <img
-                                    src={preview}
-                                    className="w-[430px] h-[250px] object-cover mt-2 border-[3px] border-zinc-900"
-                                />
-                            )}
-
-                            <div className="relative mt-3">
-                                <div className="absolute bg-zinc-900 inset-0 translate-x-1.5 translate-y-2"></div>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleImageChange}
-                                    className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0 bg-white file:py-2 file:px-3 file:font-bold file:border-0 file:bg-zinc-900 file:text-white file:hover:cursor-pointer"
-                                    required
-                                />
-                            </div>
-                            <p className="text-xs text-zinc-600 mt-4">
-                                Max file size: 2MB. Formats: JPG, PNG, GIF
-                            </p>
-                        </div>
-
                         <div className="flex gap-14">
                             <div className="flex flex-col flex-1">
                                 <label className="text-xl font-bold">
-                                    Location
+                                    Company
                                 </label>
                                 <div className="relative">
                                     <div className="absolute bg-zinc-900 inset-0 translate-x-1.5 translate-y-2"></div>
                                     <input
                                         type="text"
-                                        name="location"
+                                        name="company"
                                         className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0"
-                                        value={data.location}
+                                        value={data.company}
                                         onChange={(e) =>
-                                            setData("location", e.target.value)
+                                            setData("company", e.target.value)
                                         }
                                         required
                                     />
@@ -125,34 +72,58 @@ export default function CreateEvent() {
 
                             <div className="flex flex-col flex-1">
                                 <label className="text-xl font-bold">
-                                    Date
+                                    Client Role
+                                    <span className="text-xs font-regular ml-1">
+                                        (optional)
+                                    </span>
                                 </label>
                                 <div className="relative">
                                     <div className="absolute bg-zinc-900 inset-0 translate-x-1.5 translate-y-2"></div>
                                     <input
-                                        type="date"
-                                        name="event_date"
+                                        type="text"
+                                        name="role"
                                         className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0"
-                                        value={data.event_date}
+                                        value={data.role}
                                         onChange={(e) =>
-                                            setData(
-                                                "event_date",
-                                                e.target.value,
-                                            )
+                                            setData("role", e.target.value)
                                         }
-                                        required
                                     />
                                 </div>
                             </div>
                         </div>
 
                         <div className="flex flex-col">
-                            <label className="text-xl font-bold">
-                                Description{" "}
-                                <span className="text-xs text-zinc-900 font-regular">
-                                    (max description length is 200 chars.
-                                    Currently: {descriptionLength})
+                            <label className="text-xl font-bold">Rating</label>
+                            <div className="flex gap-2 mt-1">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <button
+                                        key={star}
+                                        type="button"
+                                        onClick={() => setData("rating", star)}
+                                        className="text-4xl focus:outline-none transition-colors"
+                                    >
+                                        <span
+                                            className={
+                                                star <= data.rating
+                                                    ? "text-zinc-900"
+                                                    : "text-gray-300"
+                                            }
+                                        >
+                                            ★
+                                        </span>
+                                    </button>
+                                ))}
+                            </div>
+                            {data.rating > 0 && (
+                                <span className="text-sm text-gray-600 mt-1">
+                                    {data.rating} / 5 stars
                                 </span>
+                            )}
+                        </div>
+
+                        <div className="flex flex-col -mt-5">
+                            <label className="text-xl font-bold">
+                                Review Message
                             </label>
                             <div className="relative h-[100px]">
                                 <div className="absolute bg-zinc-900 inset-0 translate-x-2 translate-y-3"></div>
@@ -162,11 +133,12 @@ export default function CreateEvent() {
                                             e.preventDefault();
                                         }
                                     }}
-                                    name="description"
+                                    name="message"
                                     className="relative border-2 border-zinc-900 w-full mt-1 focus:border-zinc-700 focus:border-[3px] focus:ring-0 h-full"
-                                    value={data.description}
-                                    maxLength={200}
-                                    onChange={handleDescriptionChange}
+                                    value={data.message}
+                                    onChange={(e) =>
+                                        setData("message", e.target.value)
+                                    }
                                     required
                                 />
                             </div>

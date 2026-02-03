@@ -1,0 +1,3 @@
+- body article per paragraf
+- article: index, edit, delete
+- limit teks
