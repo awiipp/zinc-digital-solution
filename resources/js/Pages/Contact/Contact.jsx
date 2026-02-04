@@ -159,7 +159,7 @@ export default function Contact() {
                             </h2>
                             <p className="mb-6">
                                 Your message has been successfully sent. We'll
-                                get back to you soon!
+                                contact to you back from email soon!
                             </p>
                             <button
                                 onClick={() => setShowModal(false)}

@@ -45,7 +45,7 @@ export default function ArticlesTable({ articles, status }) {
                             className="w-fit text-sm font-bold px-5 py-2 hover:bg-zinc-900 text-zinc-900 border-[3px] border-zinc-900 hover:text-white justify-center items-center gap-3 transition hover:rotate-2 flex"
                         >
                             <FaPlus />
-                            New Product
+                            New Article
                         </Link>
                         <div className="flex gap-3 items-end">
                             <Link

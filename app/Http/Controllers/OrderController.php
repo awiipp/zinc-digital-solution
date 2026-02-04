@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -29,6 +30,10 @@ class OrderController extends Controller
     {
         $product = Product::where('product_code', $code)->first();
 
+        if ($product->status === 'soldout') {
+            return redirect()->route('products.show', $product->product_code);
+        }
+
         return Inertia::render('Orders/CreateOrder', [
             'product' => $product,
         ]);
@@ -45,7 +50,7 @@ class OrderController extends Controller
 
         $order = Order::create($validated);
 
-        return redirect()->route('orders.created', [
+        return redirect()->route('orders.invoice', [
             'number' => $order->order_number,
         ]);
     }
@@ -72,13 +77,38 @@ class OrderController extends Controller
         return redirect()->back();
     }
 
-    public function created(string $number)
+    public function invoice(string $number)
     {
         $order = Order::where('order_number', $number)->first();
 
-        return Inertia::render('Orders/OrderSuccess', [
+        $whatsapp = 'https://wa.me/6288297646784';
+        $message = rawurlencode('Halo Admin, saya ingin mengonfirmasi pesanan atas nama *'
+            . $order->full_name
+            . '* dengan nomor order *'
+            . $order->order_number
+            . '*. Terima kasih.');
+
+        $message_url = $whatsapp . "?text=" . $message;
+
+        return Inertia::render('Orders/Invoice', [
             'order' => $order,
             'product' => $order->product,
+            'message_url' => $message_url,
         ]);
+    }
+
+    public function download(string $number)
+    {
+        $order = Order::with(['product'])->where('order_number', $number)->first();
+
+        $order->total_estimate = number_format((int) $order->total_estimate, 0, ',', '.');
+
+        // return view('Pdf.Invoice', ['order' => $order]);
+
+        $pdf = Pdf::loadView('Pdf.Invoice', [
+            'order' => $order,
+        ]);
+
+        return $pdf->download('invoice-' . $order->order_number . '.pdf');
     }
 }

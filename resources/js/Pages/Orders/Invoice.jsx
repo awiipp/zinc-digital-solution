@@ -2,7 +2,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import { FaCheckCircle } from "react-icons/fa";
 
-export default function OrderSuccess({ order, product }) {
+export default function Invoice({ order, product, message_url }) {
     const formatRupiah = (price) => {
         return new Intl.NumberFormat("id-ID", {
             style: "currency",
@@ -105,10 +105,29 @@ export default function OrderSuccess({ order, product }) {
                                     </div>
                                 </div>
                             </div>
-                            <div className="relative w-full">
+                            <div className="relative w-full flex flex-col gap-3">
+                                <a
+                                    href={message_url}
+                                    target="_blank"
+                                    as="button"
+                                    className="relative z-10 w-full font-bold px-5 py-3 hover:bg-green-600 hover:border-green-600 text-zinc-900 border-[3px] border-green-500 bg-green-500 justify-center items-center gap-2 transition flex"
+                                >
+                                    Cofirm via WhatsApp
+                                </a>
+                                <a
+                                    href={route(
+                                        "orders.download",
+                                        order.order_number,
+                                    )}
+                                    target="_blank"
+                                    as="button"
+                                    className="relative z-10 w-full font-bold px-5 py-3 hover:bg-zinc-800 text-white border-[3px] border-zinc-900 bg-zinc-900 justify-center items-center gap-2 transition flex"
+                                >
+                                    Download Invoice
+                                </a>
                                 <Link
                                     href={route("products.index")}
-                                    className="relative z-10 w-full font-bold px-5 py-3 hover:bg-zinc-900 text-zinc-900 border-[3px] border-zinc-900 hover:text-white justify-center items-center gap-2 transition hover:rotate-1 flex"
+                                    className="relative z-10 w-full font-bold px-5 py-3 hover:bg-zinc-900 text-zinc-900 border-[3px] border-zinc-900 hover:text-white justify-center items-center gap-2 transition flex"
                                 >
                                     Back to Products
                                 </Link>

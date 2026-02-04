@@ -6,6 +6,7 @@ use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -38,6 +39,10 @@ class ArticleController extends Controller
     public function show(string $slug)
     {
         $article = Article::where('slug', $slug)->first();
+
+        if ($article->status === 'draft' && !Auth::check()) {
+            return redirect()->route('articles.index');
+        }
 
         $newestArticles = Article::where('id', '!=', $article->id)
             ->orderBy('published_at', 'desc')->take(2)->get();

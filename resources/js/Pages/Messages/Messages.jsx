@@ -110,9 +110,9 @@ export default function Messages({ messages, status }) {
                                                 Mark as Read
                                             </Link>
                                         )}
-                                        <button className="bg-zinc-900 font-medium text-sm px-3 py-1 text-white hover:bg-zinc-800 transition">
+                                        {/* <button className="bg-zinc-900 font-medium text-sm px-3 py-1 text-white hover:bg-zinc-800 transition">
                                             Reply via Email
-                                        </button>
+                                        </button>*/}
                                         <Link
                                             href={route(
                                                 "messages.destroy",
