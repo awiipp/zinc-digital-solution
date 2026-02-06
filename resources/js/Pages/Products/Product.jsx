@@ -115,7 +115,7 @@ export default function Product({ product }) {
                                     ) : (
                                         <div className="relative bg-zinc-300 z-10 w-full font-bold px-5 py-2 text-zinc-900 border-[3px] border-zinc-900 justify-center items-center gap-2 transition flex cursor-pointer">
                                             <FaShoppingCart />
-                                            SOLD OUT
+                                            Sold Out
                                         </div>
                                     )}
                                 </div>

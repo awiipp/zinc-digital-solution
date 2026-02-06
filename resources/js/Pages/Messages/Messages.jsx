@@ -1,7 +1,10 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
+import { useEffect, useState } from "react";
 
 export default function Messages({ messages, status }) {
+    const { flash } = usePage().props;
+    const [showModal, setShowModal] = useState(false);
     const activeStatus = status;
 
     const formatDate = (date) => {
@@ -14,11 +17,19 @@ export default function Messages({ messages, status }) {
         });
     };
 
+    console.log("FLASH:", flash);
+
     const filterClass = (status) => {
         return `text-sm z-10 w-fit h-fit font-bold px-3 py-1 hover:bg-zinc-900 border-2 border-zinc-900 hover:text-white justify-center items-center gap-3 transition flex ${
             activeStatus === status ? "bg-zinc-900 text-white" : "text-zinc-900"
         }`;
     };
+
+    useEffect(() => {
+        if (flash?.success) {
+            setShowModal(true);
+        }
+    }, [flash]);
 
     return (
         <AuthenticatedLayout>
@@ -110,9 +121,17 @@ export default function Messages({ messages, status }) {
                                                 Mark as Read
                                             </Link>
                                         )}
-                                        {/* <button className="bg-zinc-900 font-medium text-sm px-3 py-1 text-white hover:bg-zinc-800 transition">
+
+                                        <Link
+                                            href={route(
+                                                "messages.reply",
+                                                message.id,
+                                            )}
+                                            className="bg-zinc-900 font-medium text-sm px-3 py-1 text-white hover:bg-zinc-800 transition flex items-center"
+                                        >
                                             Reply via Email
-                                        </button>*/}
+                                        </Link>
+
                                         <Link
                                             href={route(
                                                 "messages.destroy",
@@ -160,6 +179,26 @@ export default function Messages({ messages, status }) {
                     </div>
                 )}
             </main>
+
+            {showModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="relative">
+                        <div className="absolute bg-zinc-900 inset-0 translate-x-2 translate-y-2"></div>
+                        <div className="relative bg-white border-[4px] border-zinc-900 p-8 w-96 text-center">
+                            <h2 className="text-2xl font-bold mb-4">
+                                Message Sent!
+                            </h2>
+                            <p className="mb-6">{flash?.success}</p>
+                            <button
+                                onClick={() => setShowModal(false)}
+                                className="px-6 py-2 bg-zinc-900 text-white font-bold border-[3px] border-zinc-900 hover:bg-zinc-700 transition"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </AuthenticatedLayout>
     );
 }

@@ -1,3 +1,10 @@
 - body article per paragraf
 - article: index, edit, delete
 - limit teks
+
+sebuah company profile udah ada fitur berikut:
+halaman home, about us, profile, product, contact, article, event, gallery, client, order, message, dashboard, chat via wa, reply via email. ada saran gak next fitur?
+
+- multi language
+- publish article terjadwal (schedule)
+- export data statistik

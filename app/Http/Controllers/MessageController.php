@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\MessageRequest;
+use App\Mail\SendReplyMessageMail;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class MessageController extends Controller
@@ -54,5 +58,40 @@ class MessageController extends Controller
         ]);
 
         return redirect()->back();
+    }
+
+    public function reply(string $id)
+    {
+        $message = Message::find($id);
+
+        return Inertia::render('Messages/Reply', [
+            'message' => $message,
+        ]);
+    }
+
+    public function send(Request $request, string $id)
+    {
+        $message = Message::find($id);
+
+        $validator = Validator::make($request->all(), [
+            'title' => ['required', 'string'],
+            'reply' => ['required', 'string'],
+        ]);
+
+        $validated = $validator->validated();
+
+        $reply = [
+            'subject' => $validated['title'],
+            'title' => $validated['title'],
+            'name' => $message->name,
+            'admin_name' => Auth::user()->name,
+            'reply' => $validated['reply'],
+        ];
+
+        Mail::to($message->email)->send(new SendReplyMessageMail($reply));
+
+        $message->update(['read_at' => Carbon::now()]);
+
+        return redirect()->route('messages.index')->with('success', 'Successed send email reply to ' . $message->email);
     }
 }

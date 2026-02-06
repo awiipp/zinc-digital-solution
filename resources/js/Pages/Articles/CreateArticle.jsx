@@ -9,7 +9,7 @@ export default function CreateArticle() {
     const { data, setData, post } = useForm({
         title: "",
         image: null,
-        status: "",
+        status: "draft",
         excerpt: "",
         introduction: "",
         body: "",

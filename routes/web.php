@@ -51,8 +51,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/clients/table', [ClientController::class, 'table'])->name('clients.table');
     Route::get('/clients/{id}/edit', [ClientController::class, 'edit'])->name('clients.edit');
-    Route::put('/clients/{id}/publish', [ClientController::class, 'publish'])->name('clients.publish');
     Route::put('/clients/{id}/draft', [ClientController::class, 'draft'])->name('clients.draft');
+    Route::put('/clients/{id}/publish', [ClientController::class, 'publish'])->name('clients.publish');
     Route::put('/clients/{id}', [ClientController::class, 'update'])->name('clients.update');
     Route::delete('/clients/{id}', [ClientController::class, 'destroy'])->name('clients.destroy');
 
@@ -62,6 +62,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
     Route::put('/messages/{id}/read', [MessageController::class, 'read'])->name('messages.read');
+    Route::get('/messages/{id}/reply', [MessageController::class, 'reply'])->name('messages.reply');
+    Route::post('/messages/{id}/send', [MessageController::class, 'send'])->name('messages.send');
     Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('messages.destroy');
 });
 

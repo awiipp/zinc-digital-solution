@@ -123,6 +123,15 @@ export default function Orders({ orders, status }) {
                     </Link>
                 </div>
 
+                <div>
+                    <form>
+                        <div className="flex flex-col">
+                            <label>Search Order Number</label>
+                            <input type="text" name="order_number" />
+                        </div>
+                    </form>
+                </div>
+
                 <section className="flex flex-wrap w-full gap-5 mb-32">
                     {orders.data.length === 0 ? (
                         <div className="relative w-full max-w-2xl mx-auto mt-20">
