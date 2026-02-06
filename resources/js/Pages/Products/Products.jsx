@@ -19,7 +19,7 @@ export default function Products({ products }) {
         <AuthenticatedLayout>
             <Head title="Product" />
             <main>
-                <div className="bg-zinc-900 px-20 pt-14 pb-14 text-white">
+                <div className="bg-zinc-900 relative w-full px-20 py-16 text-white overflow-hidden">
                     <h1 className="text-5xl font-bold">
                         Zinc{" "}
                         <span className="underline decoration-4 underline-offset-[10px] decoration-white">
@@ -29,6 +29,10 @@ export default function Products({ products }) {
                     <p className="text-xl mt-3 text-zinc-300">
                         Creative merchandise for meaningful moments.
                     </p>
+                    <img
+                        src="/images/product.png"
+                        className="absolute w-[20rem] right-[5rem] top-[20px]"
+                    />
                 </div>
 
                 <section className="mt-10 pb-32 px-20">

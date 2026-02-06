@@ -10,17 +10,21 @@ export default function Clients({ reviews, clients }) {
             <Head title="Clients" />
 
             <main className="min-h-screen bg-zinc-50">
-                <div className="px-20 pt-14 bg-zinc-900 text-white pb-14">
+                <div className="relative w-full px-20 pt-14 bg-zinc-900 text-white pb-14 overflow-hidden">
                     <h1 className="text-5xl font-bold mb-3">
                         <span className="underline decoration-4 underline-offset-[10px] decoration-white">
                             Trusted
                         </span>{" "}
                         By
                     </h1>
-                    <p className="text-xl text-zinc-300">
+                    <p className="text-xl text-zinc-300 w-[30rem]">
                         Clients who have trusted us to deliver creative
                         merchandise and event solutions.
                     </p>
+                    <img
+                        src="/images/client.png"
+                        className="absolute w-[23rem] right-[5rem] -top-[2rem]"
+                    />
                 </div>
 
                 {clients.length === 0 && reviews.length === 0 ? (
