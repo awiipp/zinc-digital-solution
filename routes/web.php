@@ -9,6 +9,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -57,8 +58,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/clients/{id}', [ClientController::class, 'destroy'])->name('clients.destroy');
 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/track', [OrderController::class, 'track'])->name('orders.track');
     Route::put('/orders/{id}', [OrderController::class, 'update'])->name('orders.update');
     Route::delete('/orders/{id}', [OrderController::class, 'destroy'])->name('orders.destroy');
+    Route::get('/orders/{number}/mail', [OrderController::class, 'mail'])->name('orders.mail');
+    Route::post('/orders/{number}/send', [OrderController::class, 'send'])->name('orders.send');
 
     Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
     Route::put('/messages/{id}/read', [MessageController::class, 'read'])->name('messages.read');
@@ -66,7 +70,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/messages/{id}/send', [MessageController::class, 'send'])->name('messages.send');
     Route::delete('/messages/{id}', [MessageController::class, 'destroy'])->name('messages.destroy');
 });
-
 
 Route::get('/home', fn() => Inertia::render('Home/Home'))->name('home');
 Route::get('/about', fn() => Inertia::render('AboutUs/AboutUs'))->name('about-us');
@@ -87,11 +90,17 @@ Route::post('/clients', [ClientController::class, 'store'])->name('clients.store
 Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
 Route::get('/clients/create', [ClientController::class, 'create'])->name('clients.create');
 
+Route::get('/orders/track', [OrderController::class, 'track'])->name('orders.track');
 Route::get('/orders/{code}/create', [OrderController::class, 'create'])->name('orders.create');
 Route::get('/orders/{number}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
 Route::get('/orders/{number}/download', [OrderController::class, 'download'])->name('orders.download');
 Route::post('/orders/{code}', [OrderController::class, 'store'])->name('orders.store');
 
 Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
+
+Route::post('/language', function (Request $request) {
+    session(['locale' => $request->lang]);
+    return back();
+})->name('language.switch');
 
 require __DIR__ . '/auth.php';

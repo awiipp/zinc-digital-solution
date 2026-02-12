@@ -1,7 +1,8 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
-import { useEffect, useState } from "react";
-import { FaArrowLeft, FaCheckCircle } from "react-icons/fa";
+import { useEffect } from "react";
+import { FaArrowLeft } from "react-icons/fa";
+import t from "@/utils/t";
 
 export default function OrderCreate({ product }) {
     const { data, setData, post } = useForm({
@@ -38,14 +39,14 @@ export default function OrderCreate({ product }) {
     return (
         <AuthenticatedLayout>
             <Head title="Request Order" />
-            <main className="px-20 pt-12 pb-14 min-h-screen">
+            <main className="md:px-20 px-10 pt-12 pb-14 min-h-screen">
                 <div className="mb-8">
                     <Link
                         href={route("products.index")}
                         className="text-zinc-800 font-medium hover:text-zinc-600 mb-4 flex items-center gap-2"
                     >
                         <FaArrowLeft />
-                        Back to Products
+                        {t("product.back")}
                     </Link>
                 </div>
 
@@ -57,11 +58,11 @@ export default function OrderCreate({ product }) {
                         Order!
                     </h1>
                     <p className="text-lg text-zinc-600 mt-3">
-                        Fill out the form below to place a product order.
+                        {t("order.desc")}
                     </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-8">
+                <div className="grid md:grid-cols-2 grid-cols-1 gap-8">
                     <div className="relative h-fit">
                         <div className="absolute bg-zinc-900 inset-0 translate-x-2 translate-y-2"></div>
                         <div className="relative border-[4px] border-zinc-900 overflow-hidden bg-white">
@@ -94,7 +95,7 @@ export default function OrderCreate({ product }) {
                                 <div className="space-y-6">
                                     <div>
                                         <label className="block text-sm font-bold mb-2">
-                                            Full name
+                                            {t("order.name")}
                                         </label>
                                         <input
                                             type="text"
@@ -129,7 +130,7 @@ export default function OrderCreate({ product }) {
 
                                     <div>
                                         <label className="block text-sm font-bold mb-2">
-                                            WhatsApp number
+                                            {t("order.whatsapp")}
                                         </label>
                                         <input
                                             type="tel"
@@ -149,7 +150,7 @@ export default function OrderCreate({ product }) {
 
                                     <div>
                                         <label className="block text-sm font-bold mb-2">
-                                            Order quantity
+                                            {t("order.quantity")}
                                         </label>
                                         <input
                                             type="number"
@@ -166,13 +167,13 @@ export default function OrderCreate({ product }) {
                                             required
                                         />
                                         <p className="text-xs text-zinc-500 mt-1">
-                                            Minimum order: 1 pcs
+                                            {t("order.min")}
                                         </p>
                                     </div>
 
                                     <div>
                                         <label className="block text-sm font-bold mb-2">
-                                            Custom note (optional)
+                                            {t("order.note")}
                                         </label>
                                         <textarea
                                             name="note"
@@ -183,23 +184,21 @@ export default function OrderCreate({ product }) {
                                             className="w-full px-4 py-2 border-[3px] border-zinc-900 focus:border-zinc-900 focus:border-4 focus:ring-0 h-32 resize-none"
                                         ></textarea>
                                         <p className="text-xs text-zinc-500 mt-1">
-                                            Optional: Specific details for
-                                            custom orders
+                                            {t("order.note.desc")}
                                         </p>
                                     </div>
 
                                     <div className="bg-zinc-100 p-4 border-[3px] border-zinc-900">
                                         <div className="flex justify-between items-center">
                                             <span className="font-bold">
-                                                Total Estimate:
+                                                {t("order.total")}:
                                             </span>
                                             <span className="text-2xl font-bold">
                                                 {formatRupiah(calculateTotal())}
                                             </span>
                                         </div>
                                         <p className="text-xs text-zinc-600 mt-2">
-                                            * Final price will be confirmed by
-                                            our team
+                                            {t("order.total.desc")}
                                         </p>
                                     </div>
 
@@ -213,9 +212,7 @@ export default function OrderCreate({ product }) {
                                     </div>
 
                                     <p className="text-xs text-center text-zinc-500">
-                                        By submitting an order, you agree to be
-                                        contacted by our team for order
-                                        confirmation.
+                                        {t("order.submit.desc")}
                                     </p>
                                 </div>
                             </form>

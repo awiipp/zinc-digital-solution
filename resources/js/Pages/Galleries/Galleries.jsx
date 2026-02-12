@@ -1,5 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
+import t from "@/utils/t";
 
 export default function Galleries({ galleries }) {
     return (
@@ -15,8 +16,7 @@ export default function Galleries({ galleries }) {
                         Stories
                     </h1>
                     <p className="text-xl mt-3 text-zinc-300">
-                        A collection of moments showcasing our creative works,
-                        products, and event collaborations.
+                        {t("galleries.desc")}
                     </p>
                 </div>
 
@@ -26,11 +26,10 @@ export default function Galleries({ galleries }) {
                             <div className="absolute bg-zinc-400 inset-0 translate-x-2 translate-y-2"></div>
                             <div className="relative bg-white border-4 border-zinc-400 p-12 text-center">
                                 <h2 className="text-3xl font-bold text-zinc-400 mb-4">
-                                    No Galleries Available
+                                    {t('galleries.none')}
                                 </h2>
                                 <p className="text-lg text-zinc-400">
-                                    Our gallery is being curated. Amazing
-                                    moments will be added soon!
+                                    {t('galleries.none.desc')}
                                 </p>
                             </div>
                         </div>

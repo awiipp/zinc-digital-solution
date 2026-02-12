@@ -1,5 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
+import t from "@/utils/t";
 
 export default function Clients({ reviews, clients }) {
     console.log(reviews);
@@ -18,8 +19,7 @@ export default function Clients({ reviews, clients }) {
                         By
                     </h1>
                     <p className="text-xl text-zinc-300 w-[30rem]">
-                        Clients who have trusted us to deliver creative
-                        merchandise and event solutions.
+                        {t("clients.desc")}
                     </p>
                     <img
                         src="/images/client.png"
@@ -32,11 +32,10 @@ export default function Clients({ reviews, clients }) {
                         <div className="absolute bg-zinc-400 inset-0 translate-x-2 translate-y-2"></div>
                         <div className="relative bg-white border-4 border-zinc-400 p-12 text-center">
                             <h2 className="text-3xl font-bold text-zinc-400 mb-4">
-                                No Testimonial Yet
+                                {t("clients.none")}
                             </h2>
                             <p className="text-lg text-zinc-400">
-                                We haven't received any client feedback yet.
-                                <br /> Be the first to work with us!
+                                {t("clients.none.desc")}
                             </p>
                         </div>
                     </div>
@@ -46,7 +45,7 @@ export default function Clients({ reviews, clients }) {
                             <div className="flex items-center gap-3 mb-10">
                                 <div className="w-12 h-1 bg-zinc-900"></div>
                                 <h2 className="text-3xl font-bold text-zinc-900">
-                                    Our Clients
+                                    {t("clients.clients")}
                                 </h2>
                             </div>
 
@@ -68,7 +67,7 @@ export default function Clients({ reviews, clients }) {
                             <div className="flex items-center gap-3 mb-10">
                                 <div className="w-12 h-1 bg-zinc-900"></div>
                                 <h2 className="text-3xl font-bold text-zinc-900">
-                                    What Our Clients Say
+                                    {t("clients.review")}
                                 </h2>
                             </div>
 
@@ -127,11 +126,10 @@ export default function Clients({ reviews, clients }) {
                         <div className="absolute inset-0 bg-zinc-900 translate-x-2 translate-y-2"></div>
                         <div className="relative bg-white border-4 border-zinc-900 p-12 text-center">
                             <h2 className="text-3xl font-bold text-zinc-900 mb-4">
-                                Share Your Experience
+                                {t("clients.cta")}
                             </h2>
                             <p className="text-lg text-zinc-600 mb-8">
-                                Have you worked with us? We'd love to hear about
-                                your experience!
+                                {t("clients.cta.desc")}
                             </p>
                             <Link
                                 href={route("clients.create")}
@@ -139,7 +137,7 @@ export default function Clients({ reviews, clients }) {
                             >
                                 <div className="absolute inset-0 bg-white border-[3px] border-zinc-900 translate-x-2 translate-y-1 group-hover:translate-x-1 group-hover:translate-y-0.5 transition-all"></div>
                                 <div className="relative bg-zinc-900 text-white font-bold px-8 py-3 text-lg border-[3px] border-zinc-900">
-                                    Write a Review
+                                    {t("clients.cta.button")}
                                 </div>
                             </Link>
                         </div>

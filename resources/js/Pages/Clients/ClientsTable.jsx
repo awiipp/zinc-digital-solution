@@ -130,7 +130,7 @@ export default function ClientsTable({ clients, status }) {
                                             )}
                                         </td>
                                         <td className="text-sm border-b-[3px] border-zinc-900 px-5 py-2">
-                                            {truncate(client.message, 200)}
+                                            {truncate(client.message, 100)}
                                         </td>
                                         <td className="text-sm w-[90px] border-b-[3px] border-zinc-900 px-5">
                                             <div className="flex justify-center flex-wrap w-full gap-1">

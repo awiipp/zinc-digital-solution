@@ -1,6 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import { FaCheckCircle } from "react-icons/fa";
+import t from "@/utils/t";
 
 export default function Invoice({ order, product, message_url }) {
     const formatRupiah = (price) => {
@@ -25,29 +26,27 @@ export default function Invoice({ order, product, message_url }) {
                         <div className="relative bg-white border-[4px] border-zinc-900 p-12">
                             <FaCheckCircle className="text-6xl text-zinc-900 mx-auto mb-6" />
                             <h1 className="text-4xl font-bold mb-4">
-                                Order Sent Successfully!
+                                {t("invoice.title")}
                             </h1>
                             <p className="text-lg text-zinc-600 mb-6">
-                                Thank you for your order. We will contact you
-                                soon for further confirmation.
+                                {t("invoice.desc")}
                             </p>
                             <div className="bg-yellow-50 border-[3px] border-yellow-500 p-4 mb-6">
                                 <p className="font-bold text-zinc-900">
-                                    Status: Pending Confirmation
+                                    {t("invoice.status")}
                                 </p>
                                 <p className="text-sm text-zinc-900 mt-2">
-                                    Our team will contact you within 1x24 hours
-                                    to confirm order details and payment.
+                                    {t("invoice.status.desc")}
                                 </p>
                             </div>
                             <div className="text-left bg-zinc-50 p-6 border-[3px] border-zinc-900 mb-6">
                                 <h3 className="font-bold text-lg mb-3">
-                                    Order Details:
+                                    {t("invoice.detail")}:
                                 </h3>
                                 <div className="space-y-2 text-sm">
                                     <div className="flex justify-between">
                                         <span className="text-zinc-600">
-                                            Order Number:
+                                            {t("invoice.number")}:
                                         </span>
                                         <span className="font-semibold">
                                             {order.order_number}
@@ -55,7 +54,7 @@ export default function Invoice({ order, product, message_url }) {
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-zinc-600">
-                                            Product:
+                                            {t("invoice.product")}:
                                         </span>
                                         <span className="font-semibold">
                                             {product.name}
@@ -63,7 +62,7 @@ export default function Invoice({ order, product, message_url }) {
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-zinc-600">
-                                            Quantity:
+                                            {t("invoice.quantity")}:
                                         </span>
                                         <span className="font-semibold">
                                             {order.quantity} pcs
@@ -71,7 +70,7 @@ export default function Invoice({ order, product, message_url }) {
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-zinc-600">
-                                            Name:
+                                            {t("invoice.name")}:
                                         </span>
                                         <span className="font-semibold">
                                             {order.full_name}
@@ -96,7 +95,7 @@ export default function Invoice({ order, product, message_url }) {
                                     <div className="border-t-2 border-zinc-400 pt-2 mt-2">
                                         <div className="flex justify-between">
                                             <span className="font-bold">
-                                                Total Estimate:
+                                                {t("invoice.total")}:
                                             </span>
                                             <span className="font-bold text-lg">
                                                 {formatRupiah(calculateTotal())}
@@ -112,7 +111,7 @@ export default function Invoice({ order, product, message_url }) {
                                     as="button"
                                     className="relative z-10 w-full font-bold px-5 py-3 hover:bg-green-600 hover:border-green-600 text-zinc-900 border-[3px] border-green-500 bg-green-500 justify-center items-center gap-2 transition flex"
                                 >
-                                    Cofirm via WhatsApp
+                                    {t("invoice.confirm")}
                                 </a>
                                 <a
                                     href={route(
@@ -123,13 +122,13 @@ export default function Invoice({ order, product, message_url }) {
                                     as="button"
                                     className="relative z-10 w-full font-bold px-5 py-3 hover:bg-zinc-800 text-white border-[3px] border-zinc-900 bg-zinc-900 justify-center items-center gap-2 transition flex"
                                 >
-                                    Download Invoice
+                                    {t("invoice.download")}
                                 </a>
                                 <Link
                                     href={route("products.index")}
                                     className="relative z-10 w-full font-bold px-5 py-3 hover:bg-zinc-900 text-zinc-900 border-[3px] border-zinc-900 hover:text-white justify-center items-center gap-2 transition flex"
                                 >
-                                    Back to Products
+                                    {t("product.back")}
                                 </Link>
                             </div>
                         </div>

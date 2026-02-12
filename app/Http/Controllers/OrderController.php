@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderRequest;
+use App\Mail\SendOrderConfirmationMail;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -16,7 +18,13 @@ class OrderController extends Controller
     {
         $status = $request->query('status', 'all');
 
-        $orders = Order::with(['product'])->when($status !== 'all', function ($q) use ($status) {
+        $orders = Order::query()->with(['product']);
+
+        if ($request->has('search')) {
+            $orders->where('order_number', $request->input('search'));
+        }
+
+        $orders = $orders->when($status !== 'all', function ($q) use ($status) {
             $q->where('status', $status);
         })->latest()->paginate(10)->withQueryString();
 
@@ -103,12 +111,43 @@ class OrderController extends Controller
 
         $order->total_estimate = number_format((int) $order->total_estimate, 0, ',', '.');
 
-        // return view('Pdf.Invoice', ['order' => $order]);
-
         $pdf = Pdf::loadView('Pdf.Invoice', [
             'order' => $order,
         ]);
 
         return $pdf->download('invoice-' . $order->order_number . '.pdf');
+    }
+
+    public function track(Request $request)
+    {
+        $number = $request->query('number', null);
+
+        $order = Order::with('product')->where('order_number', $number)->first();
+
+        return Inertia::render('Orders/TrackOrder', [
+            'order' => $order,
+        ]);
+    }
+
+    public function mail(string $number)
+    {
+        $order = Order::with('product')->where('order_number', $number)->first();
+
+        return Inertia::render('Orders/MailSend', [
+            'order' => $order,
+            'tracking_url' => route('orders.track'),
+        ]);
+    }
+
+    public function send(string $number)
+    {
+        $order = Order::with('product')->where('order_number', $number)->first();
+        $order->total_estimate = number_format((int) $order->total_estimate, 0, ',', '.');
+
+        $tracking_url = route('orders.track');
+
+        Mail::to($order->email)->send(new SendOrderConfirmationMail($order, $tracking_url));
+
+        return redirect()->route('orders.index')->with('success', 'Successed send email order confirmation to ' . $order->email);
     }
 }

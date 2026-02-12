@@ -1,5 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, useForm } from "@inertiajs/react";
+import t from "@/utils/t";
 
 export default function CreateClient() {
     const { data, setData, post } = useForm({
@@ -21,7 +22,7 @@ export default function CreateClient() {
             <Head title="Create Review" />
 
             <main className="px-20 pt-14 min-h-screen">
-                <h1 className="text-4xl font-bold mb-10">Create Review</h1>
+                <h1 className="text-4xl font-bold mb-10">{t('review.title')}</h1>
 
                 <section className="max-w-4xl pb-32">
                     <form
@@ -30,7 +31,7 @@ export default function CreateClient() {
                     >
                         <div className="flex flex-col">
                             <label className="text-xl font-bold">
-                                Client Name
+                                {t('review.name')}
                             </label>
                             <div className="relative">
                                 <div className="absolute bg-zinc-900 inset-0 translate-x-1.5 translate-y-2"></div>
@@ -50,7 +51,7 @@ export default function CreateClient() {
                         <div className="flex gap-14">
                             <div className="flex flex-col flex-1">
                                 <label className="text-xl font-bold">
-                                    Company
+                                    {t('review.company')}
                                 </label>
                                 <div className="relative">
                                     <div className="absolute bg-zinc-900 inset-0 translate-x-1.5 translate-y-2"></div>
@@ -69,9 +70,9 @@ export default function CreateClient() {
 
                             <div className="flex flex-col flex-1">
                                 <label className="text-xl font-bold">
-                                    Client Role
+                                    {t('review.role')}
                                     <span className="text-xs font-regular ml-1">
-                                        (optional)
+                                        ({t('review.optional')})
                                     </span>
                                 </label>
                                 <div className="relative">
@@ -90,7 +91,7 @@ export default function CreateClient() {
                         </div>
 
                         <div className="flex flex-col">
-                            <label className="text-xl font-bold">Rating</label>
+                            <label className="text-xl font-bold">{t('review.rating')}</label>
                             <div className="flex gap-2 mt-1">
                                 {[1, 2, 3, 4, 5].map((star) => (
                                     <button
@@ -113,14 +114,14 @@ export default function CreateClient() {
                             </div>
                             {data.rating > 0 && (
                                 <span className="text-sm text-gray-600 mt-1">
-                                    {data.rating} / 5 stars
+                                    {data.rating} / 5 {t('review.stars')}
                                 </span>
                             )}
                         </div>
 
                         <div className="flex flex-col -mt-5">
                             <label className="text-xl font-bold">
-                                Review Message
+                                {t('review.message')}
                             </label>
                             <div className="relative h-[100px]">
                                 <div className="absolute bg-zinc-900 inset-0 translate-x-2 translate-y-3"></div>
@@ -140,8 +141,7 @@ export default function CreateClient() {
                                 />
                             </div>
                             <p className="text-sm mt-7 font-medium">
-                                (Your review has a chance to be featured on our
-                                Clients & Reviews page)
+                                ({t('review.note')})
                             </p>
                         </div>
 
@@ -151,7 +151,7 @@ export default function CreateClient() {
                                 type="submit"
                                 className="relative z-10 block w-fit text-lg font-bold px-5 py-2 bg-zinc-900 text-white transition rotate-2 group-hover:rotate-0"
                             >
-                                Submit
+                                {t('review.submit')}
                             </button>
                         </div>
                     </form>

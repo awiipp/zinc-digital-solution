@@ -77,59 +77,70 @@ export default function Orders({ orders, status }) {
                     </h1>
                 </div>
 
-                <div className="flex gap-3 items-end mb-5">
-                    <Link
-                        href={route("orders.index")}
-                        className={filterClass("all")}
-                        preserveScroll
-                    >
-                        All
-                    </Link>
-                    <Link
-                        href={route("orders.index", {
-                            status: "pending",
-                        })}
-                        className={filterClass("pending")}
-                        preserveScroll
-                    >
-                        Pending
-                    </Link>
-                    <Link
-                        href={route("orders.index", {
-                            status: "progress",
-                        })}
-                        className={filterClass("progress")}
-                        preserveScroll
-                    >
-                        Progress
-                    </Link>
-                    <Link
-                        href={route("orders.index", {
-                            status: "completed",
-                        })}
-                        className={filterClass("completed")}
-                        preserveScroll
-                    >
-                        Completed
-                    </Link>
-                    <Link
-                        href={route("orders.index", {
-                            status: "cancelled",
-                        })}
-                        className={filterClass("cancelled")}
-                        preserveScroll
-                    >
-                        Cancelled
-                    </Link>
-                </div>
-
-                <div>
-                    <form>
-                        <div className="flex flex-col">
-                            <label>Search Order Number</label>
-                            <input type="text" name="order_number" />
-                        </div>
-                    </form>
+                <div className="flex mb-5 flex-row-reverse gap-10">
+                    <div className="gap-3 flex items-end">
+                        <Link
+                            href={route("orders.index")}
+                            className={filterClass("all")}
+                            preserveScroll
+                        >
+                            All
+                        </Link>
+                        <Link
+                            href={route("orders.index", {
+                                status: "pending",
+                            })}
+                            className={filterClass("pending")}
+                            preserveScroll
+                        >
+                            Pending
+                        </Link>
+                        <Link
+                            href={route("orders.index", {
+                                status: "progress",
+                            })}
+                            className={filterClass("progress")}
+                            preserveScroll
+                        >
+                            Progress
+                        </Link>
+                        <Link
+                            href={route("orders.index", {
+                                status: "completed",
+                            })}
+                            className={filterClass("completed")}
+                            preserveScroll
+                        >
+                            Completed
+                        </Link>
+                        <Link
+                            href={route("orders.index", {
+                                status: "cancelled",
+                            })}
+                            className={filterClass("cancelled")}
+                            preserveScroll
+                        >
+                            Cancelled
+                        </Link>
+                    </div>
+                    <div className="flex w-full">
+                        <form className="w-full items-end">
+                            <input
+                                type="text"
+                                name="search"
+                                className="border-2 w-full px-4 py-2 h-[45px] border-zinc-900 focus:border-zinc-900 focus:border-[3px] focus:ring-0"
+                                placeholder="Search order by number"
+                            />
+                        </form>
+                        <Link
+                            className="bg-zinc-900 text-white px-5 font-bold"
+                            href={route("orders.index")}
+                            as="button"
+                            preserveScroll
+                        >
+                            Reset
+                        </Link>
+                    </div>
                 </div>
 
                 <section className="flex flex-wrap w-full gap-5 mb-32">
@@ -184,7 +195,12 @@ export default function Orders({ orders, status }) {
                                                 </h2>
                                             </div>
                                             <div className="flex flex-col gap-2">
-                                                <p>: {order.email}</p>
+                                                <Link href={route('orders.mail', order.order_number)}>
+                                                    :{" "}
+                                                    <span className="underline underline-offset-4 hover:font-bold transition duration-300">
+                                                        {order.email}
+                                                    </span>
+                                                </Link>
                                                 <p>: {order.product.name}</p>
                                                 <p>: {order.quantity}</p>
                                                 <p>: {order.whatsapp}</p>

@@ -1,6 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, usePage } from "@inertiajs/react";
 import { FaArrowLeft, FaEdit, FaTrash } from "react-icons/fa";
+import t from "@/utils/t";
 
 export default function Article({ article, newest_articles }) {
     const user = usePage().props.auth?.user ?? null;
@@ -29,7 +30,7 @@ export default function Article({ article, newest_articles }) {
                             className="text-zinc-800 font-medium hover:text-zinc-600 mb-4 flex items-center gap-2"
                         >
                             <FaArrowLeft />
-                            Back to Articles
+                            {t("article.back")}
                         </Link>
                         <div className="flex justify-between w-full">
                             <div>
@@ -123,7 +124,7 @@ export default function Article({ article, newest_articles }) {
                                 <div className="absolute inset-0 bg-zinc-400 translate-x-2 translate-y-2"></div>
                                 <div className="relative bg-zinc-900 border-4 border-zinc-900 px-8 py-5 text-white rotate-1">
                                     <h2 className="text-2xl font-bold mb-4">
-                                        Final Thoughts
+                                        {t("article.conclusion")}
                                     </h2>
                                     <p className="text-zinc-300 leading-relaxed">
                                         {article.conclusion}
@@ -134,8 +135,7 @@ export default function Article({ article, newest_articles }) {
 
                         <div className="mt-14 text-center">
                             <p className="text-xl text-zinc-700 mb-6">
-                                Need help choosing merchandise for your next
-                                event?
+                                {t("article.cta")}
                             </p>
                             <Link
                                 href={route("products.index")}
@@ -143,7 +143,7 @@ export default function Article({ article, newest_articles }) {
                             >
                                 <div className="absolute inset-0 bg-zinc-900 translate-x-1.5 translate-y-1.5 group-hover:translate-x-2 group-hover:translate-y-2 transition-all"></div>
                                 <div className="relative bg-white border-4 border-zinc-900 px-8 py-4 font-bold text-lg hover:-rotate-1 transition-all">
-                                    Explore Our Products →
+                                    {t("article.cta.button")} →
                                 </div>
                             </Link>
                         </div>
@@ -155,7 +155,7 @@ export default function Article({ article, newest_articles }) {
                         <div className="flex items-center gap-3 mb-8">
                             <div className="w-12 h-1 bg-zinc-900"></div>
                             <h2 className="text-3xl font-bold text-zinc-900">
-                                Newest Articles
+                                {t("article.newest")}
                             </h2>
                         </div>
 

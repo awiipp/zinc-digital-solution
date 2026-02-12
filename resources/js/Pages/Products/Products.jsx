@@ -1,6 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import { FaShoppingCart } from "react-icons/fa";
+import t from "@/utils/t";
 
 export default function Products({ products }) {
     const formatRupiah = (price) => {
@@ -27,91 +28,111 @@ export default function Products({ products }) {
                         </span>
                     </h1>
                     <p className="text-xl mt-3 text-zinc-300">
-                        Creative merchandise for meaningful moments.
+                        {t("products.description")}
                     </p>
                     <img
                         src="/images/product.png"
-                        className="absolute w-[20rem] right-[5rem] top-[20px]"
+                        className="absolute w-[20rem] right-[5rem] top-[20px] md:block hidden"
                     />
                 </div>
 
-                <section className="mt-10 pb-32 px-20">
+                <div className="relative w-full mx-auto mt-10 md:px-20 px-10">
+                    <div className="relative bg-white border-[3px] border-zinc-900 px-10 py-3 flex md:flex-row flex-col md:gap-0 gap-3 items-center justify-between">
+                        <p className="text-lg font-medium text-zinc-900">
+                            {t("products.track")}
+                        </p>
+                        <Link
+                            href={route("orders.track")}
+                            className="font-bold px-6 py-2 bg-zinc-900 text-white text-sm border-[3px] border-zinc-900 hover:bg-white hover:text-zinc-900 transition hover:rotate-1 whitespace-nowrap"
+                        >
+                            {t("products.track.button")}
+                        </Link>
+                    </div>
+                </div>
+
+                <section className="mt-10 pb-32 md:px-20 px-10">
                     {products.length === 0 ? (
                         <div className="relative max-w-2xl mx-auto mt-20">
                             <div className="absolute bg-zinc-400 inset-0 translate-x-2 translate-y-2"></div>
                             <div className="relative bg-white border-4 border-zinc-400 p-12 text-center">
                                 <h2 className="text-3xl font-bold text-zinc-400 mb-4">
-                                    No Products Available
+                                    {t("products.none")}
                                 </h2>
                                 <p className="text-lg text-zinc-400">
-                                    We're currently updating our product
-                                    catalog. Please check back soon!
+                                    {t("products.none.body")}
                                 </p>
                             </div>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-3 gap-8">
+                        <div className="grid md:grid-cols-3 grid-cols-1 gap-8">
                             {products.map((product) => (
-                                <Link
-                                    key={product.product_code}
-                                    href={route(
-                                        "products.show",
-                                        product.product_code,
-                                    )}
-                                    className="relative h-fit block"
-                                >
-                                    <div className="absolute bg-zinc-900 inset-0 translate-x-2 translate-y-2"></div>
-                                    <div className="relative hover:translate-x-2 hover:translate-y-2 border-[3px] border-zinc-900 overflow-hidden bg-white shadow-sm hover:shadow-md transition">
-                                        <img
-                                            src={`/storage/${product.image}`}
-                                            alt="Custom T-shirt"
-                                            className="w-full h-44 object-cover"
-                                        />
-                                        <div className="p-5">
-                                            {product.status === "soldout" && (
-                                                <div className="bg-zinc-900 text-white text-sm h-fit w-fit font-bold px-5 py-1 mb-2">
-                                                    Sold Out
-                                                </div>
-                                            )}
-                                            <h3 className="text-xl font-semibold mb-2">
-                                                {truncate(product.name, 80)}
-                                            </h3>
-                                            <p className="text-sm text-zinc-600 mb-4">
-                                                {truncate(
-                                                    product.description,
-                                                    150,
-                                                )}
-                                            </p>
-                                            <div className="flex items-center justify-between mb-4">
-                                                <span className="text-xl font-bold text-zinc-900">
-                                                    {formatRupiah(
-                                                        product.price,
-                                                    )}
-                                                </span>
-                                            </div>
-                                            <div className="relative w-full">
+                                <>
+                                    <Link
+                                        key={product.product_code}
+                                        href={route(
+                                            "products.show",
+                                            product.product_code,
+                                        )}
+                                        className="relative h-fit block"
+                                    >
+                                        <div className="absolute bg-zinc-900 inset-0 translate-x-2 translate-y-2"></div>
+                                        <div className="relative hover:translate-x-2 hover:translate-y-2 border-[3px] border-zinc-900 overflow-hidden bg-white shadow-sm hover:shadow-md transition">
+                                            <img
+                                                src={`/storage/${product.image}`}
+                                                alt="Custom T-shirt"
+                                                className="w-full h-44 object-cover"
+                                            />
+                                            <div className="p-5">
                                                 {product.status ===
-                                                "available" ? (
-                                                    <Link
-                                                        href={route(
-                                                            "orders.create",
-                                                            product.product_code,
-                                                        )}
-                                                        className="relative z-10 w-full font-bold px-5 py-2 hover:bg-zinc-900 text-zinc-900 border-[3px] border-zinc-900 hover:text-white justify-center items-center gap-2 transition hover:rotate-1 flex"
-                                                    >
-                                                        <FaShoppingCart />
-                                                        Request Order
-                                                    </Link>
-                                                ) : (
-                                                    <div className="relative z-10 w-full font-bold px-5 py-2 text-zinc-900 border-[3px] border-zinc-900 justify-center items-center gap-2 transition cursor-pointer bg-zinc-300 flex">
-                                                        <FaShoppingCart />
-                                                        Sold Out
+                                                    "soldout" && (
+                                                    <div className="bg-zinc-900 text-white text-sm h-fit w-fit font-bold px-5 py-1 mb-2">
+                                                        {t("products.soldout")}
                                                     </div>
                                                 )}
+                                                <h3 className="text-xl font-semibold mb-2">
+                                                    {truncate(product.name, 80)}
+                                                </h3>
+                                                <p className="text-sm text-zinc-600 mb-4">
+                                                    {truncate(
+                                                        product.description,
+                                                        150,
+                                                    )}
+                                                </p>
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <span className="text-xl font-bold text-zinc-900">
+                                                        {formatRupiah(
+                                                            product.price,
+                                                        )}
+                                                    </span>
+                                                </div>
+                                                <div className="relative w-full">
+                                                    {product.status ===
+                                                    "available" ? (
+                                                        <Link
+                                                            href={route(
+                                                                "orders.create",
+                                                                product.product_code,
+                                                            )}
+                                                            className="relative z-10 w-full font-bold px-5 py-2 hover:bg-zinc-900 text-zinc-900 border-[3px] border-zinc-900 hover:text-white justify-center items-center gap-2 transition hover:rotate-1 flex"
+                                                        >
+                                                            <FaShoppingCart />
+                                                            {t(
+                                                                "products.request",
+                                                            )}
+                                                        </Link>
+                                                    ) : (
+                                                        <div className="relative z-10 w-full font-bold px-5 py-2 text-zinc-900 border-[3px] border-zinc-900 justify-center items-center gap-2 transition cursor-pointer bg-zinc-300 flex">
+                                                            <FaShoppingCart />
+                                                            {t(
+                                                                "products.soldout",
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </Link>
+                                    </Link>
+                                </>
                             ))}
                         </div>
                     )}

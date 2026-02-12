@@ -45,6 +45,7 @@ class ArticleController extends Controller
         }
 
         $newestArticles = Article::where('id', '!=', $article->id)
+            ->where('status', 'published')
             ->orderBy('published_at', 'desc')->take(2)->get();
 
         return Inertia::render('Articles/Article', [

@@ -1,5 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
+import t from "@/utils/t";
 
 export default function Events({ events }) {
     const formatDate = (dateString) => {
@@ -15,17 +16,18 @@ export default function Events({ events }) {
             <Head title="Events" />
 
             <main>
-                <div className="mb-10 px-20 pt-14 bg-zinc-900 text-white pb-14">
+                <div className="relative overflow-hidden mb-10 px-20 pt-14 bg-zinc-900 text-white pb-14">
                     <h1 className="text-5xl font-bold mb-3">
                         #Creative{" "}
                         <span className="underline decoration-4 underline-offset-[10px] decoration-white">
                             Events
                         </span>
                     </h1>
-                    <p className="text-xl text-zinc-300">
-                        Events and activities where our creative products bring
-                        brands to life.
-                    </p>
+                    <p className="text-xl text-zinc-300">{t("events.desc")}</p>
+                    <img
+                        src="/images/event.png"
+                        className="absolute w-[20rem] right-[5rem] -top-[5rem]"
+                    />
                 </div>
 
                 <section className="px-20 pb-32">
@@ -34,11 +36,10 @@ export default function Events({ events }) {
                             <div className="absolute bg-zinc-400 inset-0 translate-x-2 translate-y-2"></div>
                             <div className="relative bg-white border-4 border-zinc-400 p-12 text-center">
                                 <h2 className="text-3xl font-bold text-zinc-400 mb-4">
-                                    No Events Yet
+                                    {t("events.none")}
                                 </h2>
                                 <p className="text-lg text-zinc-400">
-                                    We're preparing exciting events for you.
-                                    Please check back soon!
+                                    {t("events.none.desc")}
                                 </p>
                             </div>
                         </div>

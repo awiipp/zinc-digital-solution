@@ -1,6 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 import React from "react";
+import t from "@/utils/t";
 
 export default function Articles({ articles }) {
     const truncate = (text, length) => {
@@ -11,7 +12,7 @@ export default function Articles({ articles }) {
         <AuthenticatedLayout>
             <Head title="Articles" />
             <main>
-                <div className="px-20 pt-14 bg-zinc-900 text-white pb-14">
+                <div className="relative overflow-hidden px-20 pt-14 bg-zinc-900 text-white pb-14">
                     <h1 className="text-5xl font-bold mb-3">
                         Our{" "}
                         <span className="underline decoration-4 underline-offset-[10px] decoration-white">
@@ -19,9 +20,12 @@ export default function Articles({ articles }) {
                         </span>
                     </h1>
                     <p className="text-xl text-zinc-300">
-                        Insights and stories related to our products, events,
-                        and creative process.
+                        {t("articles.desc")}
                     </p>
+                    <img
+                        src="/images/article.png"
+                        className="absolute w-[20rem] right-[5rem] top-0"
+                    />
                 </div>
 
                 <section className="mt-10 px-20 pb-32">
@@ -30,11 +34,10 @@ export default function Articles({ articles }) {
                             <div className="absolute bg-zinc-400 inset-0 translate-x-2 translate-y-2"></div>
                             <div className="relative bg-white border-4 border-zinc-400 p-12 text-center">
                                 <h2 className="text-3xl font-bold text-zinc-400 mb-4">
-                                    No Articles Yet
+                                    {t("articles.none")}
                                 </h2>
                                 <p className="text-lg text-zinc-400">
-                                    We're working on creating amazing content.
-                                    Stay tuned!
+                                    {t("articles.none.desc")}
                                 </p>
                             </div>
                         </div>
@@ -61,7 +64,7 @@ export default function Articles({ articles }) {
                                                 {truncate(article.excerpt, 200)}
                                             </p>
                                             <button className="text-sm font-medium underline underline-offset-4 group-hover:bg-zinc-900 transition duration-300 group-hover:text-white px-5 py-1">
-                                                Read More
+                                                {t("articles.read")}
                                             </button>
                                         </div>
                                     </div>

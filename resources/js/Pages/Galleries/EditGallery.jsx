@@ -9,7 +9,7 @@ export default function EditGallery({ gallery }) {
     const { data, setData, post } = useForm({
         title: gallery.title,
         image: null,
-        description: gallery.description,
+        description: gallery.description ?? "",
         _method: "PUT",
     });
 
@@ -49,7 +49,7 @@ export default function EditGallery({ gallery }) {
             setPreview(`/storage/${gallery.image}`);
         }
 
-        setDescriptionLength(gallery.description.length);
+        setDescriptionLength(gallery.description?.length ?? 0);
     }, [gallery.image]);
 
     return (
