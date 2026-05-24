@@ -8,6 +8,15 @@ import {
     FaFacebookSquare,
     FaInstagram,
     FaLinkedin,
+    FaTachometerAlt,
+    FaBox,
+    FaNewspaper,
+    FaCalendarAlt,
+    FaImages,
+    FaUsers,
+    FaShoppingCart,
+    FaChevronLeft,
+    FaChevronRight,
 } from "react-icons/fa";
 import t from "@/utils/t";
 import LanguageSwitcher from "@/Components/LanguageSwitcher";
@@ -19,6 +28,7 @@ export default function AuthenticatedLayout({ header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
     const [showingSidebar, setShowingSidebar] = useState(false);
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
     const navLinks = [
         { href: "home", label: "navbar.home" },
@@ -28,14 +38,24 @@ export default function AuthenticatedLayout({ header, children }) {
         { href: "contact", label: "navbar.contact" },
     ];
 
+    const sidebarIconMap = {
+        dashboard: FaTachometerAlt,
+        products: FaBox,
+        articles: FaNewspaper,
+        events: FaCalendarAlt,
+        galleries: FaImages,
+        clients: FaUsers,
+        orders: FaShoppingCart,
+        messages: FaEnvelope,
+    };
+
     const sidebarLinks = [
         ...(user
             ? [
-                  { href: "dashboard", label: "Dashboard", adminOnly: true },
+                  { href: "dashboard", label: "Dashboard" },
                   {
                       href: "products.table",
                       label: "navbar.products",
-                      adminOnly: true,
                   },
               ]
             : []),
@@ -60,16 +80,21 @@ export default function AuthenticatedLayout({ header, children }) {
                   {
                       href: "orders.index",
                       label: "navbar.orders",
-                      adminOnly: true,
                   },
                   {
                       href: "messages.index",
                       label: "navbar.messages",
-                      adminOnly: true,
                   },
               ]
             : []),
     ];
+
+    const getIcon = (href) => {
+        const key = href.split(".")[0];
+        return sidebarIconMap[key] || FaBox;
+    };
+
+    const isActive = (href) => route().current(href.split(".")[0] + ".*");
 
     const footerNavigation = {
         column1: [
@@ -95,7 +120,7 @@ export default function AuthenticatedLayout({ header, children }) {
     ];
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-zinc-50">
             <nav className="border-b border-gray-100 bg-white fixed w-full z-30">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
@@ -282,39 +307,86 @@ export default function AuthenticatedLayout({ header, children }) {
             <div className="flex">
                 <aside
                     className={`
-                    w-56 bg-white border-r min-h-screen fixed pt-28 z-20
-                    transform transition-transform duration-300 ease-in-out
+                    fixed left-0 top-16 z-20 h-[calc(100vh-4rem)]
+                    bg-white border-r border-zinc-200
+                    transition-all duration-300 ease-in-out
                     lg:translate-x-0
+                    ${sidebarCollapsed ? "w-16" : "w-56"}
                     ${showingSidebar ? "translate-x-0" : "-translate-x-full"}
                 `}
                 >
-                    <nav className="px-8 py-5 space-y-4 flex flex-col">
-                        {user && (
-                            <h1 className="font-bold text-2xl">Admin Panel</h1>
-                        )}
-
-                        {sidebarLinks.map((link, index) => (
-                            <NavLink
-                                key={index}
-                                href={route(link.href)}
-                                active={route().current(
-                                    link.href.split(".")[0] + ".*",
-                                )}
+                    <div className="flex flex-col h-full">
+                        <div
+                            className={`
+                            flex items-center border-b border-zinc-100 py-3
+                            ${sidebarCollapsed ? "justify-center" : "justify-between px-4"}
+                        `}
+                        >
+                            {!sidebarCollapsed && (
+                                <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+                                    Menu
+                                </span>
+                            )}
+                            <button
+                                onClick={() =>
+                                    setSidebarCollapsed((prev) => !prev)
+                                }
+                                className="hidden lg:flex items-center justify-center w-7 h-7 rounded-md text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors"
                             >
-                                {link.label.includes(".")
+                                {sidebarCollapsed ? (
+                                    <FaChevronRight className="text-xs" />
+                                ) : (
+                                    <FaChevronLeft className="text-xs" />
+                                )}
+                            </button>
+                        </div>
+
+                        <nav className="flex-1 overflow-y-auto py-3 space-y-0.5">
+                            {sidebarLinks.map((link, index) => {
+                                const Icon = getIcon(link.href);
+                                const active = isActive(link.href);
+                                const label = link.label.includes(".")
                                     ? t(link.label)
-                                    : link.label}
-                            </NavLink>
-                        ))}
-                    </nav>
+                                    : link.label;
+
+                                return (
+                                    <Link
+                                        key={index}
+                                        href={route(link.href)}
+                                        className={`
+                                            flex items-center gap-3 py-2.5 text-sm transition-colors duration-150 relative
+                                            ${sidebarCollapsed ? "justify-center mx-2" : "mx-2 px-3"}
+                                            ${
+                                                active
+                                                    ? "text-zinc-900 font-medium"
+                                                    : "text-zinc-500 hover:text-zinc-800"
+                                            }
+                                            ${active ? "bg-zinc-100" : "hover:bg-zinc-50"}
+                                            rounded-lg
+                                        `}
+                                    >
+                                        {active && (
+                                            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 bg-zinc-900 rounded-r-full" />
+                                        )}
+                                        <Icon className="text-lg shrink-0" />
+                                        {!sidebarCollapsed && (
+                                            <span className="truncate">
+                                                {label}
+                                            </span>
+                                        )}
+                                    </Link>
+                                );
+                            })}
+                        </nav>
+                    </div>
                 </aside>
 
                 <button
                     onClick={() => setShowingSidebar((prev) => !prev)}
-                    className="lg:hidden fixed left-0 top-20 z-20 bg-white border border-gray-200 rounded-r-md p-2 shadow-md"
+                    className="lg:hidden fixed left-0 top-20 z-20 bg-white border border-zinc-200 rounded-r-md p-2 shadow-md"
                 >
                     <svg
-                        className="h-6 w-6 text-gray-600"
+                        className="h-5 w-5 text-zinc-600"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -334,12 +406,17 @@ export default function AuthenticatedLayout({ header, children }) {
 
                 {showingSidebar && (
                     <div
-                        className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-0 pt-16"
+                        className="lg:hidden fixed inset-0 bg-black/50 z-10"
                         onClick={() => setShowingSidebar(false)}
                     />
                 )}
 
-                <main className="flex-1 lg:ml-56 mt-16">
+                <main
+                    className={`
+                    flex-1 mt-16 transition-all duration-300 ease-in-out
+                    ${sidebarCollapsed ? "lg:ml-16" : "lg:ml-56"}
+                `}
+                >
                     {children}
 
                     <footer className="bg-zinc-900 px-6 sm:px-12 lg:px-20 pt-14">
